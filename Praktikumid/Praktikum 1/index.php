@@ -10,7 +10,7 @@
 </head>
 
 <body>
-	<h1>Tähtis pealkiri</h1>
+	<h1>Tähtis pealkiri 20.02</h1>
 	<p>Lorem ipsum bla bla bla..</p>
 	<p>Lorem ipsum bla bla bla..</p>
 	<p>Lorem ipsum bla bla bla..</p>
