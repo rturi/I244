@@ -1,23 +1,29 @@
-//allikas http://stackoverflow.com/questions/20618355/the-simplest-possible-javascript-countdown-timer
-    function startTimer(duration, display) {
-        var timer = duration, minutes, seconds;
-        setInterval(function () {
-            minutes = parseInt(timer / 60, 10);
-            seconds = parseInt(timer % 60, 10);
+//väikeste täiendustega, aga põhimõtteliselt http://stackoverflow.com/questions/6981838/timestamp-countdown-in-javascript-and-php
 
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
+    // tunni plaani märgitud eksami lõpu aja timestamp 1465126200000
 
-            display.textContent = minutes + ":" + seconds;
+var timestamp = 1465126200000 - Date.now();
 
-            if (--timer < 0) {
-                timer = duration;
-            }
-        }, 1000);
-    }
+timestamp /= 1000; // from ms to seconds
 
-window.onload = function () {
-    var fiveMinutes = 60 * 5,
-        display = document.querySelector('#time');
-    startTimer(fiveMinutes, display);
-};
+function component(x, v) {
+    return Math.floor(x / v);
+}
+
+//var $div = $('div');
+
+setInterval(function() { // execute code each second
+
+    timestamp--; // decrement timestamp with one second each second
+
+    var days    = component(timestamp, 24 * 60 * 60),      // calculate days from timestamp
+        hours   = component(timestamp,      60 * 60) % 24, // hours
+        minutes = component(timestamp,           60) % 60, // minutes
+        seconds = component(timestamp,            1) % 60; // seconds
+
+    if(1465126200000 > Date.now()){
+            document.getElementById("time").innerHTML = "Eksami lõpuni on: " + days + " päeva, " + hours + ":" + minutes + ":" + seconds;
+    } else document.getElementById("time").innerHTML = "Eksami on läbi. Istu. Viis.";
+
+
+}, 1000); // interval each second = 1000 ms

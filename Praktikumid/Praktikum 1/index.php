@@ -4,7 +4,6 @@
 		<meta charset="utf-8" />
 		<title>Praktikum 1 leht</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
-		<script src="coundDownScript.js"></script>
 	</head>
 
 	<body>
@@ -15,7 +14,8 @@
 		<p>Lorem ipsum bla bla bla..</p>
 		<img src="html.png" alt="HTML-i pilt" height="150">
 
-		<p>Countdown: <span id="time"></span></p>
+		<p id="time"></p>
+		<script src="coundDownScript.js"></script>
 		<br>
 
 		<?php
