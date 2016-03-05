@@ -1,0 +1,66 @@
+/*
+width, height - näiteks pildi suuruse määramiseks
+
+background, color - ernevate pealkirjade/paragrahvide tausta ja tekstivärvi mõjutamiseks
+
+*/
+
+body {
+    width: 60%;
+    background-color: lemonchiffon;
+}
+
+h1 {
+    font-size: 300%;
+    text-align: center;
+    font-family: "Adobe Garamond Pro", monospace;
+}
+
+p {
+    cursor: col-resize;
+    color: aliceblue;
+    background-color: slategrey;
+}
+
+h2 {
+    border-style: dotted;
+    border-radius: 15px;
+}
+
+pre {
+    border-style: inset;
+}
+
+pre:hover {
+    border-style: outset;
+}
+
+em {
+    font-style: oblique;
+    color: aquamarine;
+}
+
+ul > li {
+    list-style-type: katakana-iroha;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+img.images {
+    width: 175px;
+    height: 290px;
+    border-style: ridge;
+    border-width: thick;
+    border-top-color: crimson;
+    border-bottom-color: purple;
+    border-left-color: darkorange;
+    border-right-color: greenyellow;
+}
+
+img:hover.images {
+    width: 150px;
+    height: 250px;
+}
+
