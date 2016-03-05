@@ -1,0 +1,42 @@
+.dark_green {
+    background-color: darkgreen;
+}
+
+.green_text {
+    color: green;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+.doublesized {
+    font-size: 200%;
+}
+
+#monospaced {
+    font-family: monospace;
+}
+
+#tigerish {
+    border-style: solid;
+    background-color: yellow;
+}
+
+#roundish {
+    border-style: dashed;
+    border-radius: 20%;
+}
+
+#centered_and_shifty {
+    text-align: center;
+    font-style: italic;
+}
+
+#target_acquired {
+    cursor: crosshair;
+}
+
+
+
+
