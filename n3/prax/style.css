@@ -1,11 +1,29 @@
 body {
+    margin: 0 auto;
     width: 60%;
-    background-color: lemonchiffon;
+    background-color: ghostwhite;
+}
+
+.content {
+    position: relative;
+    float: right;
+    width: 80%;
+}
+
+
+.menu {
+    position: relative;
+    float: left;
+    min-width: 70px;
+}
+
+.validator {
+    position: absolute;
+    bottom: 0px;
 }
 
 h1 {
-    font-size: 300%;
-    text-align: center;
+    color: darkred;
     font-family: "Adobe Garamond Pro", monospace;
 }
 
@@ -56,4 +74,3 @@ img:hover.images {
     width: 150px;
     height: 250px;
 }
-
