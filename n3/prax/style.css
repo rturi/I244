@@ -1,8 +1,23 @@
 body {
-    margin: 0 auto;
-    width: 60%;
     background-color: ghostwhite;
 }
+
+.page_container {
+    border-style: dotted;
+    border-right-color: aqua;
+    margin: 0 auto;
+    width: 60%;
+    min-height: 100px;
+    background-color: red;
+}
+
+/* from http://stackoverflow.com/questions/211383/which-method-of-clearfix-is-best */
+.page_container:after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
 
 .content {
     position: relative;
@@ -22,7 +37,7 @@ body {
     bottom: 0px;
 }
 
-h1 {
+#top_h1 {
     color: darkred;
     font-family: "Adobe Garamond Pro", monospace;
 }
