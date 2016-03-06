@@ -4,11 +4,10 @@ body {
 
 .page_container {
     border-style: dotted;
-    border-right-color: aqua;
     margin: 0 auto;
     width: 60%;
     min-height: 100px;
-    background-color: red;
+    background-color: white;
 }
 
 /* from http://stackoverflow.com/questions/211383/which-method-of-clearfix-is-best */
@@ -21,10 +20,11 @@ body {
 
 .content {
     position: relative;
+    text-align: justify;
     float: right;
-    width: 80%;
+    margin-right: 5%;
+    width: 70%;
 }
-
 
 .menu {
     position: relative;
@@ -32,8 +32,19 @@ body {
     min-width: 70px;
 }
 
+.menu a {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+}
+
+.menu li :hover {
+    background-color: red;
+}
+
 .validator {
     position: absolute;
+    float: right;
     bottom: 0px;
 }
 
@@ -44,8 +55,8 @@ body {
 
 p {
     cursor: col-resize;
-    color: aliceblue;
-    background-color: slategrey;
+    color: black;
+    background-color: beige;
 }
 
 h2 {
@@ -76,16 +87,10 @@ ul > li {
 
 img.images {
     width: 175px;
-    height: 290px;
     border-style: ridge;
     border-width: thick;
-    border-top-color: crimson;
-    border-bottom-color: purple;
-    border-left-color: darkorange;
-    border-right-color: greenyellow;
 }
 
 img:hover.images {
     width: 150px;
-    height: 250px;
 }
