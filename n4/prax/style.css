@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: ghostwhite;
+}
+
+.page_container {
+    border: 2px dotted;
+    margin: auto;
+    min-width: 600px;
+    max-width: 1000px;
+    min-height: 300px;
+    background-color: white;
+}
+
+
+/*inspiration from http://www.w3schools.com/css/tryit.asp?filename=trycss_navbar_vertical_responsive*/
+
+
+
+.menu ul {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 20%;
+    height: 200px;
+    overflow: auto;
+    display: block;
+    list-style-type: none;
+}
+
+
+.menu li a {
+    display: block;
+    font-size: medium;
+    color: black;
+    padding: 10px 10px 10px 20px;
+    background-color: lightgray;
+    text-decoration: none;
+}
+
+
+.menu li a:hover {
+    color: white;
+    background-color: dimgray;
+}
+
+.validator {
+    position: absolute;
+    float: right;
+    bottom: 0px;
+}
+
+.content {
+    position: relative;
+    top: -200px;
+    width: 80%;
+    right: 0;
+    margin-left: 20%;
+}
+
+.content p {
+    cursor: col-resize;
+    color: black;
+    margin: 1em;
+}
+
+.content ol {
+    margin: 1em;
+    padding-left: 20px;
+}
+
+.content ul {
+    margin: 1em;
+    padding-left: 20px;
+}
+
+#top_h1 {
+    margin: 1em;
+    color: darkred;
+    font-family: "Adobe Garamond Pro", monospace;
+}
+
+h2 {
+    margin: 1em;
+    border-style: dotted;
+    border-radius: 15px;
+}
+
+pre {
+    margin: 1em;
+    border-style: inset;
+}
+
+pre:hover {
+    border-style: outset;
+}
+
+em {
+    font-style: oblique;
+    color: aquamarine;
+}
+
+
+.underlined {
+    text-decoration: underline;
+}
+
+img.images {
+    width: 175px;
+    border-style: ridge;
+    border-width: thick;
+}
+
+img:hover.images {
+    width: 150px;
+}
