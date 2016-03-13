@@ -1,0 +1,35 @@
+.bead {
+    float: right;
+    height: 50px;
+    width: 50px;
+    background-color: saddlebrown;
+    border-radius: 50%;
+    box-shadow: 0px -11px 23px -3px black inset;
+    margin-top: -25px;
+}
+
+.row {
+    clear: both;
+    border: 2px solid slategray;
+    margin-top: 50px;
+}
+ #raam {
+     border: 15px;
+     border-style: outset;
+     border-left-color: rosybrown;
+     border-top-color: rosybrown;
+     border-right-color: brown;
+     border-bottom-color: brown;
+     width: 700px;
+     padding-bottom: 50px;
+ }
+
+ .flicked {
+     float: left;
+     height: 50px;
+     width: 50px;
+     background-color: saddlebrown;
+     border-radius: 50%;
+     box-shadow: 0px -11px 23px -3px black inset;
+     margin-top: -25px;
+ }
