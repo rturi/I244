@@ -1,0 +1,59 @@
+#parent {
+    width: 200px;
+    height: 200px;
+    position: fixed;
+    left: 200px;
+    top: 150px;
+}
+
+.child {
+    border-radius: 50%;
+    position: absolute;
+}
+
+.child:nth-child(1) {
+    height: 100%;
+    width: 100%;
+    background-color: red;
+}
+
+.child:nth-child(2) {
+    height: 80%;
+    width: 80%;
+    left: 10%;
+    top: 10%;
+    background-color: white;
+    /*border: solid 2px pink;*/
+}
+
+.child:nth-child(3) {
+    height: 60%;
+    width: 60%;
+    top: 20%;
+    left: 20%;
+    background-color: red;
+}
+
+.child:nth-child(4) {
+    height: 40%;
+    width: 40%;
+    left: 30%;
+    top: 30%;
+    background-color: white;
+}
+
+.child:nth-child(5) {
+    height: 20%;
+    width: 20%;
+    left: 40%;
+    top: 40%;
+    background-color: red;
+}
+
+.child:nth-child(6) {
+    height: 7%;
+    width: 7%;
+    left: 46.5%;
+    top: 46.5%;
+    background-color: white;
+}

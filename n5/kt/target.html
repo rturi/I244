@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Target</title>
+    <link rel="stylesheet" href="target.css">
+</head>
+<body>
+<!--http://enos.itcollege.ee/~rturi/I244/n5/kt/target.html-->
+    <img src="duck.png" alt="lesser spotted long billed mallard">
+<div id="parent">
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+    <div class="child"></div>
+</div>
+<script>
+    window.onload = function() {
+        var movingTarget = document.getElementById('parent');
+        movingTarget.onclick = function() {
+            movingTarget.style.top = (Math.random() * 390) + "px";
+            movingTarget.style.left = (Math.random() * 390) + "px";
+        }
+    }
+</script>
+</body>
+</html>
