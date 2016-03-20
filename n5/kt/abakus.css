@@ -27,11 +27,11 @@
 
  .flicked {
      float: left;
-     height: 50px;
-     width: 50px;
-     background-color: saddlebrown;
-     border-radius: 50%;
-     box-shadow: 0px -11px 23px -3px black inset;
-     margin-top: -25px;
-     text-align: center;
+     /*height: 50px;*/
+     /*width: 50px;*/
+     /*background-color: saddlebrown;*/
+     /*border-radius: 50%;*/
+     /*box-shadow: 0px -11px 23px -3px black inset;*/
+     /*margin-top: -25px;*/
+     /*text-align: center;*/
  }

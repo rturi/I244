@@ -1,13 +1,16 @@
 window.onload = function() {
 
-    var beadArray = document.querySelectorAll(".bead, .flicked");
+    var beadArray = document.querySelectorAll(".bead");
 
     for (var i = 0; i < beadArray.length; i++) {
-        if (beadArray[i].classList.contains("flicked")) {
-            console.log("test" + i);
-            beadArray[i].style.cssFloat = "right";
-        } else {
-            beadArray[i].style.cssFloat = "left";
+        beadArray[i].onclick = function () {
+            if (window.getComputedStyle(this).cssFloat == "undefined") {
+                this.style.cssFloat = "right";
+            } else if (window.getComputedStyle(this).cssFloat == "left") {
+                this.style.cssFloat = "right";
+            } else {
+                this.style.cssFloat = "left";
+            }
         }
     }
 
