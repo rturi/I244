@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--http://enos.itcollege.ee/~rturi/I244/n6/kt/loop.html-->
+    <meta charset="utf-8"/>
+    <title>Kodune Ülesanne</title>
+    <style type="text/css">
+        .active {
+            background: skyblue;
+            padding: 10px;
+        }
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("li").first().addClass("active");
+
+            $("#next").click(function () {
+                console.log("clicked next");
+                var originallyActive = $(".active");
+                originallyActive.removeClass("active");
+
+                if (originallyActive.is(":last-child")) {
+                    $("li").first().addClass("active");
+                } else {
+                    originallyActive.next().addClass("active");
+                }
+            });
+
+            $("#prev").click(function () {
+                console.log("clicked next");
+                var originallyActive = $(".active");
+                originallyActive.removeClass("active");
+
+                if (originallyActive.is(":first-child")) {
+                    $("li").last().addClass("active");
+                } else {
+                    originallyActive.prev().addClass("active");
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+<button id="next">edasi</button>
+<button id="prev">tagasi</button>
+
+<ul>
+    <li>esimene</li>
+    <li>teine</li>
+    <li>kolmas</li>
+    <li>neljas</li>
+</ul>
+
+</body>
+</html>
