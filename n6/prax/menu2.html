@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--http://enos.itcollege.ee/~rturi/I244/n6/prax/menu2.html-->
+	<meta charset="utf-8" />
+	<title>Menu</title>
+
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+
+//            .animate({omadus: 'väärtus', omadus:'väärtus'}, kestvus millisekundites, function(){ /* funktsioon, mis käivitatakse animatsiooni lõpus*/ })
+
+            $('#menu > li').on({
+                mouseenter: function() {
+                    $(this).find('li').animate({ 'height': '20px' }, 1000).show();
+                },
+                mouseleave: function() {
+                    $(this).find('li').animate({ 'height': '0px' }, 1000, function() {$(this).hide()});
+                }
+            });
+
+
+		});
+
+	</script>
+
+
+
+	<style type="text/css">
+	/* see stiil siin lugeda läbi */
+body {
+	background:skyblue;
+	margin:0px;
+}
+#wrap {
+	background: white;
+	width: 800px; 
+	margin: auto;
+}
+#content {
+	padding:20px;
+}
+
+
+/* menüü stiil */
+#menu, #menu ul {
+	text-align: center; 
+	background: blue;
+	margin:0px; 
+	padding: 0px;
+	list-style: none; 
+} 
+#menu > li {
+	display: inline-block;
+	position: relative; /* et tema sees olevad alamelemendid saaks tema suhtes paigutada */
+	width: 18%; 
+}
+
+
+/* menüülinkide ja dummylinkide (span) stiilid */
+#menu a, #menu span {
+	background: blue;
+	color: white;
+	font-weight: bold;
+	text-decoration: none;
+	display: inline-block; 
+	width: 100%; /*link täidab kogu li laiuse*/
+}
+#menu a:hover, #menu span:hover{
+	color: skyblue;
+	background: navy;
+}
+
+
+
+/* alamenüü paigutamine */
+#menu ul {
+	position: absolute; /* vanema suhtes paigutamine*/
+	left: 0px;
+	width: 100%;
+}
+#menu ul a {
+	width: 100%;
+}
+
+#menu ul>li {
+    height:0px;
+    display: none; /*lehe laadimisel peidus */
+}
+
+	</style>
+</head>
+<body>
+
+<div id="wrap">
+
+	<ul id="menu">
+		<li>
+			<a href="?">tavaline link</a>
+		</li><li>
+			<span>kohale minnes</span>
+			<ul>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+			</ul>
+		</li><li>
+			<span>kohale minnes</span>
+			<ul>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+			</ul>
+		</li><li>
+			<span>klikkides</span>
+			<ul>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+			</ul>
+		</li><li>
+			<span>klikkides</span>
+			<ul>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+				<li><a href="?">link</a></li>
+			</ul>
+		</li>
+	</ul>
+
+<div id="content">
+	<h1>Sisu</h1>
+	<p>Menüüsid tehakse paljude erinevate võtetega. Üks levinumaid kasutab liste ja alamliste.<br/>Vaikimisi peidetakse alamlist kasutades display:none; omadust. Seejärel kas JS või CSS abil reageeritakse kasutaja tegevustele (klikk, hiirega kohalolek) ning tuuakse alamenüü nähtavale</p>
+	<p>Selles ülesandes proovime mõlemat realiseerida kasutades jQueryt. Kohaleminemise peale ilmuvat alamenüüd saab teha ka puhta CSS abil (#menu li:hover ul {display:block; } ) </p>
+	<p>Pärast selle faili omale mahasalvestamist uurida menüü CSS-i. Soovitatav on proovida stiili muuta, et tekiks arusaam kuidas alamenüü paigutatud on.</p>
+	<p>Kui CSS selge, siis asuda jQuery juurde</p>
+</div>
+
+</div>
+
+
+</body>
+</html>
