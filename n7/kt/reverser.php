@@ -26,8 +26,6 @@ function stringReverser ($str){
 
     $answer = "";
 
-
-
     for ($i = strlen($str) - 1; $i >= 0; $i--) {
         $answer = $answer . $str[$i];
     }
