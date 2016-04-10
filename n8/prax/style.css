@@ -152,7 +152,8 @@ img:hover.images {
     display: table;
     margin: auto;
     background: rgba(0,0,0,0.7);
-    padding: 10px;
+    padding: 10px 40px;
+    position: relative;
 }
 #sulge { /* sulgemise element */
     position: fixed;
@@ -164,4 +165,23 @@ img:hover.images {
 }
 #hoidja {  /* ümbritseb kogu suure pildi elementide hulka 0px kõrgusena, et teised elemendid taga oleks kasutatavad*/
     height: 0px;
+}
+
+#prev, #next {
+    display:block;
+    position: absolute;
+    top:0px;
+    bottom:0px;
+    width: 40px;
+}
+#prev:hover, #next:hover{
+    background-color: rgba(255,255,255,0.1);
+}
+#prev {
+    left:0px;
+    background: url("prev.png") center no-repeat;
+}
+#next {
+    right:0px;
+    background: url("next.png") center no-repeat;
 }

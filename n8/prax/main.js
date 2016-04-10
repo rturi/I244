@@ -3,7 +3,7 @@ window.onload = function() {
     // only for gallery pages
     if (document.querySelectorAll("#gallery").length != 0) {
 
-        var galleryImgArray = document.querySelectorAll("#gallery img");
+        var galleryImgArray = document.querySelectorAll("#gallery a");
 
         for (var i = 0; i < galleryImgArray.length; i++) {
             galleryImgArray[i].onclick = function() {
@@ -21,11 +21,18 @@ window.onload = function() {
             var hoidja = document.querySelector("#hoidja img");
 
             hoidja.src = el.parentNode.href;
-            document.querySelector("#inf").innerHTML = el.alt;
 
-            hoidja.onload = function() {
-                suurus(this);
-            }
+
+            //document.querySelector("#inf").innerHTML = el.alt;
+            //
+            //hoidja.onload = function() {
+            //    suurus(this);
+            //}
+
+
+            $.get(el.href, "html", function(data){
+                document.getElementById('sisu').innerHTML=data;
+            });
 
             document.querySelector("#hoidja").style.display = "initial";
         }
