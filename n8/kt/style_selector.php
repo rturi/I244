@@ -70,17 +70,17 @@ if (isset($_POST['borderColor'])) {
         <hr>
         editor
         <form action="style_selector.php" method="post">
-            <textarea name="sampleText" rows="4" columns="50"><?php echo $sampleText; ?></textarea><br>
+            <textarea name="sampleText" rows="4"><?php echo $sampleText; ?></textarea><br>
             <input type="color" name="backgroundColor" value="<?php echo $backgroundColor; ?>">Taustavärvus<br>
             <input type="color" name="textColor" value="<?php echo $textColor; ?>">Tekstivärvus<br>
             Piirjoon: <br>
             <input type="number" name="borderWidth" min="0" max="20" step="1" value="<?php echo $borderWidth; ?>"> Piirjoone laius (0-20px)<br>
-            <select name="borderStyle" selected="<?php echo $borderStyle; ?>">
-                <option value="dotted">solid</option>
-                <option value="none">none</option>
-                <option value="dotted">dotted</option>
-                <option value="dashed">dashed</option>
-                <option value="double">double</option>
+            <select name="borderStyle">
+                <option value="solid" <?php if ($borderStyle == "solid") echo "selected=\"selected\"";?>>solid</option>
+                <option value="none" <?php if ($borderStyle == "none") echo "selected=\"selected\"";?>>none</option>
+                <option value="dotted" <?php if ($borderStyle == "dotted") echo "selected=\"selected\"";?>>dotted</option>
+                <option value="dashed" <?php if ($borderStyle == "dashed") echo "selected=\"selected\"";?>>dashed</option>
+                <option value="double" <?php if ($borderStyle == "double@") echo "selected=\"selected\"";?>>double</option>
             </select> <br>
             <input type="color" name="borderColor" value="<?php echo $borderColor; ?>">Piirjoone värv<br>
             <input type="number" name="borderRadius" min="0" max="100" step="5" value="<?php echo $borderRadius; ?>"> piirjoone nurga raadius (0-100px)<br>
