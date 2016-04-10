@@ -1,0 +1,13 @@
+<div id="gallery">
+
+    <?php
+
+    foreach($images as $image) {
+        echo "<a href=\"" . $image['big'] . "\">\n";
+        echo "\t<img src=\"" . $image['small'] . "\" alt=\"" . $image['alt'] . "\" height=\"100\" width=\"150\">\n";
+        echo "</a>\n";
+    }
+
+    ?>
+
+</div>
