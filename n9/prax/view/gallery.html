@@ -3,9 +3,11 @@
     <?php
 
     foreach($GLOBALS['images'] as $image) {
+        $imageSize = getimagesize($image['small']);
         echo "<a href=\"?mode=image&id=" . current($image) . "\">\n";
-        echo "\t<img src=\"" . $image['small'] . "\" alt=\"" . $image['alt'] . "\" height=\"100\" width=\"150\">\n";
+        echo "\t<img src=\"" . $image['small'] . "\" alt=\"" . $image['alt'] . "\" " . $imageSize[3] . ">\n";
         echo "</a>\n";
+
     }
 
     ?>
