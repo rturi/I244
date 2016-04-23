@@ -81,7 +81,7 @@ if (isset($_POST['borderColor'])) {
                 <option value="none" <?php if ($borderStyle == "none") echo "selected=\"selected\"";?>>none</option>
                 <option value="dotted" <?php if ($borderStyle == "dotted") echo "selected=\"selected\"";?>>dotted</option>
                 <option value="dashed" <?php if ($borderStyle == "dashed") echo "selected=\"selected\"";?>>dashed</option>
-                <option value="double" <?php if ($borderStyle == "double") echo "selected=\"selected\"";?>>double</option>
+                <option value="double" <?php if ($borderStyle == "double@") echo "selected=\"selected\"";?>>double</option>
             </select> <br>
             <input type="color" name="borderColor" value="<?php echo $borderColor; ?>">Piirjoone värv<br>
             <input type="number" name="borderRadius" min="0" max="100" step="5" value="<?php echo $borderRadius; ?>"> piirjoone nurga raadius (0-100px)<br>
