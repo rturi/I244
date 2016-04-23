@@ -9,6 +9,7 @@ if (!empty($_POST['pilt'])){
 
     if ($pilt_exists) {
         echo "valisid pildi ".$_POST['pilt'];
+        $_SESSION['gallery_already_voded'] = true;
     } else {
         echo "andsid hääle olematu pildi eest";
     }

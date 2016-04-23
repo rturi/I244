@@ -1,4 +1,17 @@
 <?php
+// http://enos.itcollege.ee/~rturi/I244/n10/kt/kontrolleriga/controller.php
+session_start();
+
+if (!empty($_GET['end']) && $_GET['end'] == 'true') {
+    $_SESSION = array();
+    if (isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), '', time()-42000, '/');
+    }
+    session_destroy();
+    session_start();
+}
+
+
 
 $pildid = array(
     array('id'=>1, 'src'=>'pildid/nameless1.jpg', 'img_id'=>'p1', 'alt'=>'nimetu 1'),
@@ -9,7 +22,13 @@ $pildid = array(
     array('id'=>6, 'src'=>'pildid/nameless6.jpg', 'img_id'=>'p6', 'alt'=>'nimetu 6')
 );
 
+if (!isset($_SESSION['gallery_already_voded'])) {
+    $_SESSION['gallery_already_voded'] = false;
+}
+
 require_once('head.html');
+
+
 
 if (!empty($_GET['mode'])) {
 
@@ -30,7 +49,9 @@ if (!empty($_GET['mode'])) {
             echo "page not found";
     }
 
-} else echo "page not found";
+} else echo include('pealeht.php');
+
+echo
 
 require_once('foot.html');
 
