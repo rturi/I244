@@ -1,0 +1,18 @@
+<?php if ($error_login_wrong_credentials) echo "<p class=\"error_message\">Sisselogimine ebaõnnestus</p>"; ?>
+<form action="?mode=login" method="post">
+    <table>
+        <tr>
+            <td>User name</td>
+            <td><input type="text" name="user" value="<?php echo $input_user; ?>"></td>
+            <td class="error_message"><?php if (!is_null($error_login_empty_user)) echo "Sisesta kasutajanimi"; ?></td>
+        </tr>
+            <td>Password</td>
+            <td><input type="password" name="password"></td>
+            <td class="error_message"><?php if (!is_null($error_login_empty_password)) echo "Sisesta parool" ?> </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Log in"></td>
+        </tr>
+    </table>
+</form>

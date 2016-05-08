@@ -1,0 +1,15 @@
+<div id="gallery">
+
+    <?php
+
+    foreach($GLOBALS['images'] as $image) {
+        $imageSize = getimagesize($image['small']);
+        echo "<a href=\"?mode=image&id=" . htmlspecialchars($image['id']) . "\">\n";
+        echo "\t<img src=\"" . htmlspecialchars($image['small']) . "\" alt=\"" . htmlspecialchars($image['alt']) . "\" " . $imageSize[3] . ">\n";
+        echo "</a>\n";
+
+    }
+
+    ?>
+
+</div>
