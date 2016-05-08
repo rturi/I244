@@ -26,11 +26,29 @@ function logout(){
 function kuva_puurid(){
 	// siia on vaja funktsionaalsust
 
-	$puurid[] = null;
+    global $connection;
 
-    $sql = "SELECT * FROM rturi_zoo";
+    $sql = "SELECT DISTINCT(cage) FROM `rturi_zoo`";
 
-	include_once('views/puurid.html');
+    $puurid[] = array();
+
+	$result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
+
+    while ($row = mysqli_fetch_assoc($result)){
+
+        $sql = "SELECT species FROM `rturi_zoo` WHERE cage = " . $row['cage'];
+
+        $result2 = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
+
+        $i = 0;
+        while ($row2 = mysqli_fetch_assoc($result2)) {
+            $puurid[$row['cage']][] = $row2['species'];
+            $i++;
+        }
+
+    }
+
+    include_once('views/puurid.html');
 	
 }
 
