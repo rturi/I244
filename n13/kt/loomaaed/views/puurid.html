@@ -1,0 +1,15 @@
+<?php foreach ($puurid as $key => $cage):?>
+
+    <?php if (!empty($cage)) :?>
+
+        Puuris <?php echo $key;?> olevad loomad:
+
+        <?php foreach ($cage as $key2 => $animal) : ?>
+            <div>
+                <img src="./pildid/<?php echo $animal; ?>.png" alt="<?php echo $animal; ?>"><br>
+            </div>
+        <?php endforeach; ?>
+
+    <?php endif; ?>
+
+<?php endforeach; ?>
