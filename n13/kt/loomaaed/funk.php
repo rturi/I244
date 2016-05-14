@@ -78,6 +78,38 @@ function kuva_puurid(){
 
 function lisa(){
 	// siia on vaja funktsionaalsust (13. nädalal)
+
+	global $connection;
+
+	if($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        $upload_field_name = 'liik';
+
+        if(empty($_POST['nimi'])) $errors['empty_name'] = "Sisesta nimi";
+		if(empty($_POST['puur'])) $errors['empty_cage'] = "Sisesta puur";
+		//if(empty($_POST['liik'])) $errors['empty_species'] = "Sisesta liik";
+        if(upload($upload_field_name) == "") $errors['upload_failed'] = "Faili upload ebaõnnestus";
+
+        $speciesFromImageName = explode(".",$_FILES[$upload_field_name]["name"]);
+
+        $insertName = mysqli_real_escape_string($connection, htmlspecialchars($_POST['nimi']));
+        $insertCage = mysqli_real_escape_string($connection, htmlspecialchars($_POST['puur']));
+        $insertSpecies = mysqli_real_escape_string($connection, htmlspecialchars($speciesFromImageName[0]));
+
+
+
+        $sql = "INSERT INTO `rturi_zoo`(`name`, `species`, `cage`) VALUES ('" . $insertName . "','" . $insertSpecies . "'," . $insertCage . ")";
+
+        $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
+
+        echo mysqli_insert_id($connection);
+
+        if (mysqli_insert_id($connection) > 0) {
+            header("Location: ?page=loomad");
+            exit(0);
+        }
+
+	}
 	
 	include_once('views/loomavorm.html');
 	
@@ -86,7 +118,8 @@ function lisa(){
 function upload($name){
 	$allowedExts = array("jpg", "jpeg", "gif", "png");
 	$allowedTypes = array("image/gif", "image/jpeg", "image/png","image/pjpeg");
-	$extension = end(explode(".", $_FILES[$name]["name"]));
+	$tmp = explode(".", $_FILES[$name]["name"]);
+    $extension = end($tmp);
 
 	if ( in_array($_FILES[$name]["type"], $allowedTypes)
 		&& ($_FILES[$name]["size"] < 100000)
