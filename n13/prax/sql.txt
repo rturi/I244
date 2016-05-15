@@ -1,0 +1,45 @@
+Loo uus tabel <sinu tudengikood>_pildid, väljadega:
+    id - integer, primary key ja auto increment omadustega, on pildi unikaalne identifikaator selles andmebaasitabelis
+    thumb - varchar
+    pilt - varchar
+    pealkiri - varchar
+    autor - varchar
+    punktid - integer
+
+    CREATE TABLE rturi_pildid (id integer PRIMARY KEY auto_increment, thumb varchar(100), pilt varchar(100), pealkiri varchar(100), autor varchar(100), punktid integer);
+
+
+Sisestada tabelisse vähemalt 5 rida.
+
+    INSERT INTO `rturi_pildid`(`thumb`, `pilt`, `pealkiri`, `autor`, `punktid`) VALUES
+        ("thumb/1.jpg", "img/1.jpg", "pilt 1", "anonüümne geenius a", 0),
+        ("thumb/2.jpg", "img/2.jpg", "pilt 2", "anonüümne geenius b", 0),
+        ("thumb/3.jpg", "img/3.jpg", "pilt 3", "anonüümne geenius a", 0),
+        ("thumb/4.jpg", "img/4.jpg", "pilt 4", "anonüümne geenius c", 0),
+        ("thumb/5.jpg", "img/5.jpg", "pilt 5", "anonüümne geenius a", 0),
+        ("thumb/6.jpg", "img/6.jpg", "pilt 6", "anonüümne geenius b", 0);
+
+
+Kirjuta SQL päring, mis leiab tabelist pildid, mis on saanud vähem kui 50 punkti ja sorteerib tulemused punktide arvu järgi kahanevas järjekorras
+
+    SELECT pilt, punktid FROM `rturi_pildid` WHERE punktid < 50 ORDER BY punktid DESC;
+
+
+Kirjuta SQL päring, mis leiab tabelist ühe autori kõik pildid (autor vali ise)
+
+    SELECT pilt, autor FROM `rturi_pildid` WHERE autor = "anonüümne geenius a";
+
+
+Kirjuta SQL päring, mis lisab kõikidele piltidele 3 punkti. Lahendus teha UPDATE päringuga
+
+    UPDATE `rturi_pildid` SET punktid = punktid + 3;
+
+
+Kirjuta SQL päring, mis leiab, mitu pilti on erinevatel autoritel (COUNT(*) ja GROUP BY autor)
+
+    SELECT autor, count(id) as pilte_autorilt FROM `rturi_pildid` GROUP BY autor;
+
+
+Kirjuta päring, mis liidab kokku kui palju on süsteemis piltidele punkte antud ( SUM(...) )
+
+    SELECT sum(punktid) as punkte_kokku FROM `rturi_pildid`;
