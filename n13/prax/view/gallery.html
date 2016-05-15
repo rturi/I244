@@ -2,6 +2,11 @@
 
     <?php
 
+    if(isset($_SESSION['upload_success'])) {
+        echo $_SESSION['upload_success'] . "<br>";
+        $_SESSION['upload_success'] = null;
+    }
+
     foreach($GLOBALS['images'] as $image) {
         $imageSize = getimagesize($image['small']);
         echo "<a href=\"?mode=image&id=" . htmlspecialchars($image['id']) . "\">\n";

@@ -1,5 +1,10 @@
-<form action="img_upload.html" method="post" enctype="multipart/form-data">
+<form action="?mode=img_upload" method="post" enctype="multipart/form-data">
     <table>
+        <?php if (isset($errors)):?>
+        <?php foreach($errors as $error):?>
+        <div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
+        <?php endforeach;?>
+        <?php endif;?>
         <tr>
             <td>Title</td>
             <td><input type="text" name="title"></td>
