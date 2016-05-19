@@ -1,0 +1,20 @@
+<div id="gallery">
+
+    <?php
+
+    if(isset($_SESSION['upload_success'])) {
+        echo $_SESSION['upload_success'] . "<br>";
+        $_SESSION['upload_success'] = null;
+    }
+
+    foreach($GLOBALS['images'] as $image) {
+        $imageSize = getimagesize($image['small']);
+        echo "<a href=\"?mode=image&id=" . htmlspecialchars($image['id']) . "\">\n";
+        echo "\t<img src=\"" . htmlspecialchars($image['small']) . "\" alt=\"" . htmlspecialchars($image['alt']) . "\" " . $imageSize[3] . ">\n";
+        echo "</a>\n";
+
+    }
+
+    ?>
+
+</div>
