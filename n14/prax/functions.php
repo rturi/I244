@@ -28,18 +28,12 @@ function getDBImages() {
     $images = array();
     global $connection;
 
-    $sql = "SELECT thumb AS small, pilt AS big, pealkiri, autor, CONCAT(pealkiri, ' by ', autor) AS alt FROM `rturi_pildid`";
+    $sql = "SELECT rturi_pildid.id, rturi_pildid.thumb AS small, rturi_pildid.pilt AS big, rturi_pildid.pealkiri, rturi_users.username as autor, rturi_pildid.pealkiri AS alt FROM `rturi_pildid`, rturi_users WHERE rturi_pildid.kasutaja_id = rturi_users.id";
 
     $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
 
     while ($row = mysqli_fetch_assoc($result)){
         $images[] = $row;
-    }
-
-    $i = 0;
-    while (isSet($images[$i])) {
-        $images[$i]['id'] = $i;
-        $i++;
     }
 
     return $images;
@@ -58,6 +52,8 @@ function show_gallery() {
     include_once('view/foot.html');
 }
 
+
+
 function show_img_upload() {
 
     global $connection;
@@ -69,16 +65,37 @@ function show_img_upload() {
     if (isset($_SESSION['username'])) {
 
         $errors = array();
+        $operation = "upload";
+
+        if (isset($_GET['id'])) {
+
+
+            $sql = "SELECT id, kasutaja_id, pealkiri FROM rturi_pildid WHERE id = " . mysqli_real_escape_string($connection, $_GET['id']);
+            $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
+
+
+            if(mysqli_num_rows($result) > 0) {
+                $piltBaasist = mysqli_fetch_assoc($result);
+
+                if ($piltBaasist['kasutaja_id'] != $_SESSION['user_id']) {
+                    $errors['update_rights_missing'] = "Sul pole õigust seda pilti muuta";
+                    //header("Location: ?mode=img_upload");
+                } else echo "pilt olemas";
+            } else {
+                echo "pilti pole";
+                header("Location: ?");
+                exit(0);
+            }
+
+            $operation = 'edit';
+
+        }
 
         if (!empty($_POST)) {
+
             if (empty($_POST['title'])) {
                 $errors['upload_empty_title'] = "Palun sisesta pildi nimi";
             } else $input_title = htmlspecialchars($_POST['title']);
-
-            if (empty($_POST['author'])) {
-                $errors['upload_empty_author'] = "Palun sisesta pildi autor";
-            } else $input_author = htmlspecialchars($_POST['author']);
-
 
             $thumb_upload = upload('thumb', 'thumb');
             $img_upload = upload('img', 'img');
@@ -91,13 +108,33 @@ function show_img_upload() {
                 $errors['upload_thumb_failed'] = "Väikse pildi upload ebaõnnestus";
             }
 
-            echo $thumb_upload;
+            if ($operation == "edit" && !isset($errors['upload_empty_author']) && !isset($errors['update_rights_missing'])) {
 
-            listFolderFiles('thumb/');
 
-            if(!isset($errors['upload_empty_author']) && !isset($errors['upload_empty_title']) && !isset($errors['upload_img_failed']) && !isset($errors['upload_thumb_failed'])) {
+                if(!isset($errors['upload_img_failed'])) {
+                    $possible_img_change = ", pilt = 'img/" . mysqli_real_escape_string($connection, $img_upload) . "' ";
+                }
+                if (!isset($errors['upload_thumb_failed'])) {
+                    $possible_thumb_change = ", thumb = 'thumb/" . mysqli_real_escape_string($connection, $thumb_upload) . "' ";;
+                }
 
-                $sql = "INSERT INTO `rturi_pildid`(`thumb`, `pilt`, `pealkiri`, `autor`) VALUES ('thumb/" . mysqli_real_escape_string($connection, $thumb_upload) . "','img/" . mysqli_real_escape_string($connection, $img_upload) . "','" . mysqli_real_escape_string($connection, $input_title) . "','" . mysqli_real_escape_string($connection, $input_author) . "')";
+                $sql = "UPDATE `rturi_pildid` SET `pealkiri`='" . $input_title . "'" . mysqli_real_escape_string($possible_img_change) . $possible_thumb_change .  " WHERE id=" . $piltBaasist['id'];
+                $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
+//                `thumb`=" . mysqli_real_escape_string($connection, $thumb_upload) . "`,`pilt`='" . mysqli_real_escape_string($connection, $img_upload) . "',
+                $_SESSION['img_edit_success'] = "pildi uuendamine õnnestus";
+
+
+
+
+
+                header("Location: ?mode=gallery");
+                exit(0);
+            }
+
+
+            if($operation == "upload" && !isset($errors['upload_empty_author']) && !isset($errors['upload_empty_title']) && !isset($errors['upload_img_failed']) && !isset($errors['upload_thumb_failed'])) {
+
+                $sql = "INSERT INTO `rturi_pildid`(`thumb`, `pilt`, `pealkiri`, `kasutaja_id`) VALUES ('thumb/" . mysqli_real_escape_string($connection, $thumb_upload) . "','img/" . mysqli_real_escape_string($connection, $img_upload) . "','" . mysqli_real_escape_string($connection, $input_title) . "','" . mysqli_real_escape_string($connection, $_SESSION['user_id']) . "')";
                 $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
 
                 if (mysqli_insert_id($connection) > 0) {
@@ -118,6 +155,7 @@ function show_img_upload() {
         exit(0);
     }
 }
+
 
 function listFolderFiles($dir){
     $ffs = scandir($dir);
@@ -178,7 +216,7 @@ function show_login() {
 
         if (!isset($errors['login_empty_password']) && !isset($errors['login_empty_user'])) {
 
-            $sql = "SELECT id, username FROM `rturi_users` WHERE username = '" . mysqli_real_escape_string($connection, $input_user) . "' AND passw = SHA1('" . mysqli_real_escape_string($connection, $input_password) . "')";
+            $sql = "SELECT id, username, role FROM `rturi_users` WHERE username = '" . mysqli_real_escape_string($connection, $input_user) . "' AND passw = SHA1('" . mysqli_real_escape_string($connection, $input_password) . "')";
 
             $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
 
@@ -186,6 +224,7 @@ function show_login() {
                 $row = mysqli_fetch_assoc($result);
                 $_SESSION['username'] = htmlspecialchars($row['username']);
                 $_SESSION['user_id'] = htmlspecialchars($row['id']);
+                $_SESSION['user_role'] = htmlspecialchars($row['role']);
                 header('Location: ?mode=gallery');
                 exit(0);
             }else {
