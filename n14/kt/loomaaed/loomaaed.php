@@ -33,6 +33,14 @@ switch($page){
             exit(0);
         }
 	break;
+	case "muuda":
+		if(isset($_SESSION['user'])){
+			muuda();
+		} else {
+			header("Location: ?page=login");
+			exit(0);
+		}
+		break;
 	default:
 		include_once('views/v2rav.html');
 	break;

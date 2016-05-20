@@ -124,6 +124,67 @@ function lisa(){
 	
 }
 
+function muuda(){
+    // siia on vaja funktsionaalsust (13. nädalal)
+
+    global $connection;
+
+    if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == "admin") {
+
+
+        $loom = array();
+
+        if (isset($_POST['loom_id']) || isset($_GET['id'])) {
+
+            if (isset($_POST['loom_id'])) {
+                $loom = hangi_loom($_POST['loom_id']);
+            } else {
+                $loom = hangi_loom($_GET['id']);
+            }
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+
+                if (empty($_POST['nimi'])) $errors['empty_name'] = "Sisesta nimi";
+                if (empty($_POST['puur'])) $errors['empty_cage'] = "Sisesta puur";
+
+                $insertName = mysqli_real_escape_string($connection, htmlspecialchars($_POST['nimi']));
+                $insertCage = mysqli_real_escape_string($connection, htmlspecialchars($_POST['puur']));
+                $insertAge = mysqli_real_escape_string($connection, htmlspecialchars($_POST['vanus']));
+
+                $loom['name'] = $insertName;
+                $loom['cage'] = $insertCage;
+                $loom['age'] = $insertAge;
+
+
+
+
+                $sql = "UPDATE `rturi_zoo` SET `name`='" . $loom['name'] . "',`age`=" . $loom['age'] . " ,`species` = '" . mysqli_real_escape_string($connection, $loom['species']) . "',`cage`='" . $loom['cage'] . "' WHERE id = " . mysqli_real_escape_string($connection, $loom['id']);
+
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+                echo mysqli_insert_id($connection);
+
+                if (mysqli_insert_id($connection) > 0) {
+                    header("Location: ?page=loomad");
+                    exit(0);
+                }
+            }
+
+        } else {
+            echo "test";
+//            header("Location: ?");
+//            exit(0);
+        }
+    } else {
+        header("Location: ?");
+        exit(0);
+    }
+
+    include_once('views/editvorm.html');
+
+}
+
 function upload($name){
 	$allowedExts = array("jpg", "jpeg", "gif", "png");
 	$allowedTypes = array("image/gif", "image/jpeg", "image/png","image/pjpeg");
@@ -170,7 +231,6 @@ function hangi_loom($id) {
         $answer['age'] = htmlspecialchars($row['age']);
         $answer['species'] = htmlspecialchars($row['species']);
         $answer['cage'] = htmlspecialchars($row['cage']);
-        print_r($answer);
     } else {
         header("Location: ?");
         exit(0);
