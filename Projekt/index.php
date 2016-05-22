@@ -19,8 +19,8 @@ if (isset($_GET['mode'])) {
         case 'list';
             show_list();
             break;
-        case 'add_task';
-            add_task();
+        case 'delete_task':
+            delete_task();
             break;
         case 'login':
             show_login();

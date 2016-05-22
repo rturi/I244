@@ -1,0 +1,26 @@
+<H1><?php echo htmlspecialchars($_SESSION['lists'][htmlspecialchars($_GET['list_id'])]['name']); ?></H1>
+
+<form action="?mode=list&list_id=<?php echo $active_list_id; ?>" method="post">
+    <table>
+        <tr>
+            <td><input type="text" name="name" value=""></td>
+            <td><input type="submit" value="Add task"></td>
+        </tr>
+            <td>
+                <?php if (isset($errors)):?>
+                <?php foreach($errors as $error):?>
+                    <div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
+                <?php endforeach;?>
+                <?php endif;?>
+            </td>
+        <tr>
+        </tr>
+    </table>
+</form>
+
+    <ul>
+<?php foreach ($active_list_tasks as $task) : ?>
+    <li><?php echo $task['name']; ?> (<a href="?mode=delete_task&task_id=<?php echo $task['id']; ?>&list_id=<?php echo $active_list_id; ?>">delete</a>)<br>
+
+<?php endforeach; ?>
+    </ul>

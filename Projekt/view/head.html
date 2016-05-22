@@ -32,7 +32,7 @@
             </li>
             <?php foreach($_SESSION['lists'] as $list) : ?>
             <li>
-                <a href="?mode=list&id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
+                <a href="?mode=list&list_id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
             </li>
             <?php endforeach; ?>
             <?php endif; ?>
