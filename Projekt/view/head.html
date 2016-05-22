@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>I244 prax</title>
+    <link type="text/css" rel="stylesheet" href="./style.css">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="./main.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<div class="page_container">
+
+    <div class="menu">
+        <ul>
+            <li>
+                <a href="?mode=main_page">Main page</a>
+            </li>
+
+            <?php if (!isset($_SESSION['username'])) : ?>
+            <li>
+                <a href="?mode=login">Log in</a>
+            </li>
+            <li>
+                <a href="?mode=register">Create account</a>
+            </li>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['username'])) : ?>
+            <li>
+                <a href="?mode=logout">Logi välja</a>
+            </li>
+            <?php foreach($_SESSION['lists'] as $list) : ?>
+            <li>
+                <a href="?mode=list&id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
+            </li>
+            <?php endforeach; ?>
+            <?php endif; ?>
+
+        </ul>
+    </div>
+
+
+    <div class="content">
+        <?php if (isset($_SESSION['show_login_message']) && $_SESSION['show_login_message'] == true): ?>
+        <p>Sisselogimine õnnestus! </p>
+        <?php
+            $_SESSION['show_login_message'] = false;
+            endif;
+        ?>
