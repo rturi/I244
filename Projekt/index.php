@@ -1,13 +1,40 @@
-<!DOCTYPE html>
-<html>
+<?php
+// Accessible from - http://enos.itcollege.ee/~rturi/I244/Projekt/
 
-    <head>
-        <meta charset="utf-8" />
-        <title>I244 projekt</title>
-    </head>
+require_once('functions.php');
 
-    <body>
-        <p>Lorem ipsum bla bla bla..</p>
-    </body>
+start_session();
+connect_db();
 
-</html>
+if (isset($_SESSION['user_id'])) {
+    $_SESSION['lists'] = get_user_lists($_SESSION['user_id']); //ToDo: find a more appropriate location
+}
+
+if (isset($_GET['mode'])) {
+    $mode = $_GET['mode'];
+    switch ($mode) {
+        case 'main_page':
+            show_main_page();
+            break;
+        case 'list';
+            show_list();
+            break;
+        case 'add_task';
+            add_task();
+            break;
+        case 'login':
+            show_login();
+            break;
+        case 'register':
+            show_register();
+            break;
+        case 'logout';
+            end_session();
+        default:
+            show_error('404');
+    }
+} else {
+    show_main_page();
+}
+
+?>
