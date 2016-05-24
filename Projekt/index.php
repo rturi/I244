@@ -30,6 +30,12 @@ if (isset($_GET['mode'])) {
             break;
         case 'logout';
             end_session();
+            break;
+        case 'list_data';
+            show_list_data();
+            break;
+        case 'search';
+            show_search();
         default:
             show_error('404');
     }

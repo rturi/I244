@@ -57,6 +57,15 @@ function get_user_lists($user_id) {
     return $answer;
 }
 
+function show_search() {
+
+
+
+    include_once('view/head.html');
+    include('view/search.html');
+    include_once('view/foot.html');
+}
+
 function show_login() {
 
     global $connection;
@@ -99,6 +108,8 @@ function show_login() {
 
 function show_list() {
 
+    // ToDo: add upper limit for number of tasks in a list
+
     if(isset($_GET['list_id'])) {
 
         // ToDo: check GET list_id
@@ -130,7 +141,11 @@ function show_list() {
                     // ToDo: add success message
                 }
 
+
             }
+
+
+
         }
 
 
@@ -146,6 +161,7 @@ function show_list() {
             // ToDo: handle lists that have no tastks
         }
 
+        $tasks_json = json_encode($active_list_tasks);
 
     } else {
         //ToDo: if is not GET list_id
@@ -155,6 +171,12 @@ function show_list() {
     include('view/list.html');
     include_once('view/foot.html');
 
+}
+
+function show_list_data () {
+    include_once('view/head.html');
+    include('view/show_list_data.html');
+    include_once('view/foot.html');
 }
 
 function delete_task () {
@@ -180,6 +202,12 @@ function delete_task () {
         }
 
     }
+
+}
+
+function set_status () {
+
+
 
 }
 
