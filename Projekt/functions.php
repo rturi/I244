@@ -57,14 +57,50 @@ function get_user_lists($user_id) {
     return $answer;
 }
 
+function search_json() {
+
+    // ToDo: no results
+
+    if(isset($_GET['q'])) {
+
+        // ToDo: validate q
+
+        global $connection;
+        $searchKey = mysqli_real_escape_string($connection, $_GET['q']);
+
+        $sql = "SELECT * FROM rturi_tasks WHERE user_id = " . $_SESSION['user_id'] . " and (info LIKE '%" . $searchKey . "%' or name LIKE '%" . $searchKey . "%') ";
+
+        $answer = array();
+
+        $result = mysqli_query($connection, $sql) or die("$sql - ".mysqli_error($connection));
+
+        if(mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)){
+                $answer[] = $row;
+            }
+        }
+
+        // ToDo: html specialchars somewhere here
+        echo json_encode($answer);
+
+
+    }
+
+
+//
+//    include_once('view/head.html');
+//    include('view/search.html');
+//    include_once('view/foot.html');
+}
+
+
 function show_search() {
-
-
 
     include_once('view/head.html');
     include('view/search.html');
     include_once('view/foot.html');
 }
+
 
 function show_login() {
 

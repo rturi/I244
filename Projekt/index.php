@@ -36,6 +36,10 @@ if (isset($_GET['mode'])) {
             break;
         case 'search';
             show_search();
+            break;
+        case 'search_json':
+            search_json();
+            break;
         default:
             show_error('404');
     }
