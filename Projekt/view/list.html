@@ -7,8 +7,8 @@
             <td><input type="submit" value="Add task"></td>
         </tr>
             <td>
-                <?php if (isset($errors)):?>
-                <?php foreach($errors as $error):?>
+                <?php if (isset($errors_add_task)):?>
+                <?php foreach($errors_add_task as $error):?>
                     <div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
                 <?php endforeach;?>
                 <?php endif;?>

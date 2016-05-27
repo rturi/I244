@@ -53,7 +53,6 @@ function get_user_lists($user_id) {
             $answer[$row['id']] = $row;
         }
     }
-
     return $answer;
 }
 
@@ -146,12 +145,11 @@ function show_list() {
 
     // ToDo: add upper limit for number of tasks in a list
 
-    if(isset($_GET['list_id'])) {
+    if(isset($_GET['list_id']) && isValidListId($_GET['list_id'])) {
 
-        // ToDo: check GET list_id
+        $active_list_id = ($_GET['list_id']);
 
         global $connection;
-        $active_list_id = htmlspecialchars($_GET['list_id']);
         $active_list_tasks = array();
 
 
@@ -164,10 +162,10 @@ function show_list() {
 
             if (empty($_POST['name'])) {
                 // ToDo: check input name
-                $errors['add_task_empty_name'] = "Please enter task name";
+                $errors_add_task['add_task_empty_name'] = "Please enter task name";
             } else $input_name = htmlspecialchars($_POST['name']);
 
-            if(!isset($errors['add_task_empty_name'])) {
+            if(!isset($errors_add_task['add_task_empty_name'])) {
 
                 $sql = "INSERT INTO rturi_tasks (name, user_id, list_id, last_change) VALUES ('" . mysqli_real_escape_string($connection, $input_name) . "', " . $_SESSION['user_id'] . ", " . $active_list_id . ", '" . date('Y-m-d H:i:s') . "')";
 
@@ -176,12 +174,7 @@ function show_list() {
                 if (mysqli_insert_id($connection) > 0) {
                     // ToDo: add success message
                 }
-
-
             }
-
-
-
         }
 
 
@@ -198,14 +191,17 @@ function show_list() {
         }
 
         $tasks_json = json_encode($active_list_tasks);
-
-    } else {
-        //ToDo: if is not GET list_id
-    }
-
     include_once('view/head.html');
     include('view/list.html');
     include_once('view/foot.html');
+
+    } else {
+        $errors['illegal_list_id'] = "Requested list does not exist, or you do not have rights to view it";
+        include_once('view/head.html');
+        echo $errors['illegal_list_id'];
+        include_once('view/foot.html');
+    }
+
 
 }
 
@@ -239,6 +235,20 @@ function delete_task () {
 
     }
 
+}
+
+
+function isValidListID($inputID) {
+
+    if(!is_numeric($inputID)) return false;
+    if($inputID < 1 && $inputID > 3000000000000) return false;
+
+    if(!isset($_SESSION['lists'][$inputID])) {
+        echo "what ya doin?";
+        return false;
+    }
+
+    return true;
 }
 
 function set_status () {
