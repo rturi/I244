@@ -128,6 +128,22 @@ img:hover.images {
     z-index:5;
 }
 
+div.task {
+    border: solid;
+    border-radius: 5px;
+    border-width: thin;
+    margin-bottom: 1px;
+}
+
+div.button_delete {
+    position: relative;
+    float: right;
+}
+div.button_done {
+    position: relative;
+    float: left;
+}
+
 
 .error_message td {
     color: red;

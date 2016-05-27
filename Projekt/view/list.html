@@ -17,23 +17,19 @@
         </tr>
     </table>
 </form>
-
-<div>
-    <h1>Active</h1>
-</div>
-
-<div>
-    <h1>Backlog</h1>
-</div>
-
-<div>
-    <h1>Done</h1>
+<div class="active_tasks_area">
+    <div class="active_task_list">
+        <ul>
+            <?php foreach ($active_list_tasks as $task) : ?>
+            <div id="<?php echo $task['id']; ?>" class="task"><img src="img/button_done.png" alt="done" class="button_done"> <?php echo $task['name']; ?> <div class="button_delete"> (<a href="?mode=delete_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&list_id=<?php echo htmlspecialchars($active_list_id); ?>">delete</a>)<img src="img/button_delete.png" alt="delete task"></div></div>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 
 
-    <ul>
-<?php foreach ($active_list_tasks as $task) : ?>
-    <div id="<?php echo $task['id']; ?>" class="task"><?php echo $task['name']; ?> (<a href="?mode=delete_task&task_id=<?php echo $task['id']; ?>&list_id=<?php echo $active_list_id; ?>">delete</a>)<img src="img/button_delete.png" alt="delete task"></div><br>
-
-<?php endforeach; ?>
-    </ul>
+<div class="completed_tasks_area">
+    <div class="completed_tasks_list">
+        <div class="button_show_completed">Show completed</div>
+    </div>
+</div>
