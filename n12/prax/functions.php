@@ -44,6 +44,10 @@ function getDBImages() {
         echo 'test';
     }
 
+//    echo '<pre>';
+//    print_r($images);
+//    echo '</pre>';
+
     return $images;
 }
 

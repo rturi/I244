@@ -25,12 +25,12 @@ window.onload = function() {
             //console.log("Data: " + data + "\nStatus: " + status);
 
 
-            //http://www.mkyong.com/jquery/jquery-loop-over-json-string-each-example/
+
             $.each($.parseJSON(data), function(idx, obj) {
 
                 $(".content").append("<li>" + obj.name);
             });
-            //test
+
 
         });
 

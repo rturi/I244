@@ -1,5 +1,5 @@
 <?php
-//http://enos.itcollege.ee/~rturi/I244/n10/kt/style_selector.php
+//http://enos.itcollege.ee/~rturi/I244/n8/kt/style_selector.php
 $sampleText = "see on näitetekst";
 if (isset($_POST['sampleText'])) {
     $sampleText = htmlspecialchars($_POST['sampleText']);
@@ -51,7 +51,6 @@ if (isset($_POST['borderColor'])) {
             border-radius: <?php echo $borderRadius; ?>%;
             border-style: <?php echo $borderStyle; ?>;
             border-width: <?php echo $borderWidth; ?>px;
-            border-color: <?php echo $borderColor; ?>;
         }
 
         .content {
@@ -81,7 +80,7 @@ if (isset($_POST['borderColor'])) {
                 <option value="none" <?php if ($borderStyle == "none") echo "selected=\"selected\"";?>>none</option>
                 <option value="dotted" <?php if ($borderStyle == "dotted") echo "selected=\"selected\"";?>>dotted</option>
                 <option value="dashed" <?php if ($borderStyle == "dashed") echo "selected=\"selected\"";?>>dashed</option>
-                <option value="double" <?php if ($borderStyle == "double") echo "selected=\"selected\"";?>>double</option>
+                <option value="double" <?php if ($borderStyle == "double@") echo "selected=\"selected\"";?>>double</option>
             </select> <br>
             <input type="color" name="borderColor" value="<?php echo $borderColor; ?>">Piirjoone värv<br>
             <input type="number" name="borderRadius" min="0" max="100" step="5" value="<?php echo $borderRadius; ?>"> piirjoone nurga raadius (0-100px)<br>

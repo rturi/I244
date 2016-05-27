@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--    http://enos.itcollege.ee/~rturi/I244/n7/kt/suurAlgus.php-->
     <meta charset="utf-8" />
     <title>Suur täht</title>
     <link href='http://fonts.googleapis.com/css?family=Dancing+Script' rel='stylesheet' type='text/css'>

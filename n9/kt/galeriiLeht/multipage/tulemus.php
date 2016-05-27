@@ -20,7 +20,7 @@ if (!empty($_GET['pilt'])){
     }
 
     if ($pilt_exists) {
-        echo "valisid pildi ".$_GET['pilt'];
+        echo "valisid ".$_GET['pilt'];
     } else {
         echo "andsid hääle olematu pildi eest";
     }

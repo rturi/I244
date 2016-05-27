@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<!--http://enos.itcollege.ee/~rturi/I244/n7/kt/fromArrayToTemplate.php-->
 <head>
     <meta charset="UTF-8">
     <title>Title</title>

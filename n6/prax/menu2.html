@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!--http://enos.itcollege.ee/~rturi/I244/n6/prax/menu2.html-->
 	<meta charset="utf-8" />
 	<title>Menu</title>
 
@@ -9,6 +8,10 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function () {
+
+
+//            .animate({omadus: 'väärtus', omadus:'väärtus'}, kestvus millisekundites, function(){ /* funktsioon, mis käivitatakse animatsiooni lõpus*/ })
+
             $('#menu > li').on({
                 mouseenter: function() {
                     $(this).find('li').animate({ 'height': '20px' }, 1000).show();
@@ -17,6 +20,8 @@
                     $(this).find('li').animate({ 'height': '0px' }, 1000, function() {$(this).hide()});
                 }
             });
+
+
 		});
 
 	</script>

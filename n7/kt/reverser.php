@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!--    http://enos.itcollege.ee/~rturi/I244/n7/kt/reverser.php-->
     <meta charset="UTF-8">
     <title>I244 - kt 7</title>
 </head>
@@ -25,6 +24,8 @@ if (!empty($_POST)) {
 function stringReverser ($str){
 
     $answer = "";
+
+
 
     for ($i = strlen($str) - 1; $i >= 0; $i--) {
         $answer = $answer . $str[$i];

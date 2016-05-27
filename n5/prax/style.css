@@ -164,4 +164,5 @@ img:hover.images {
 }
 #hoidja {  /* ümbritseb kogu suure pildi elementide hulka 0px kõrgusena, et teised elemendid taga oleks kasutatavad*/
     height: 0px;
+    display: initial;
 }

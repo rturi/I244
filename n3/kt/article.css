@@ -1,3 +1,10 @@
+/*
+width, height - näiteks pildi suuruse määramiseks
+
+background, color - ernevate pealkirjade/paragrahvide tausta ja tekstivärvi mõjutamiseks
+
+*/
+
 body {
     width: 60%;
     background-color: lemonchiffon;
