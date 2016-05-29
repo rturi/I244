@@ -9,10 +9,35 @@
     </table>
 </form>
 
-<?php if(isset($active_list_tasks)) :?>
     <div class="active_tasks_area">
-        <div class="active_task_list">
-                <?php foreach ($active_list_tasks as $task) : ?>
+        <?php if(isset($active_tasks_list)) :?>
+            <div class="active_task_list">
+                    <?php foreach ($active_tasks_list as $task) : ?>
+                        <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
+                            <div class="done_button_area"><img src="img/button_done.png" alt="done" class="button_done"></div>
+                            <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
+                            <div class="delete_button_area">
+                                <div class="button_delete">[delete]</div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+            </div>
+        <?php else : ?>
+
+            <div class="message_no_tasks">There are no active tasks in this list</div>
+
+        <?php endif;?>
+    </div>
+
+<br><br>
+<div class="completed_tasks_area">
+    <?php if (!isset($_SESSION['show_completed_tasks'])) : ?>
+        <div class="button_toggle_completed">[Show completed]</div>
+    <?php else : ?>
+        <div class="button_toggle_completed">[Hide completed]</div>
+        <div class="completed_tasks_list">
+            <?php if(isset($completed_tasks_list)) :?>
+                <?php foreach ($completed_tasks_list as $task) : ?>
                     <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
                         <div class="done_button_area"><img src="img/button_done.png" alt="done" class="button_done"></div>
                         <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
@@ -20,14 +45,13 @@
                             <div class="button_delete">[delete]</div>
                         </div>
                     </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php else : ?>
+
+                <div class="message_no_tasks">There are no completed tasks in this list</div>
+
+            <?php endif;?>
         </div>
-    </div>
-<?php endif;?>
-
-
-<div class="completed_tasks_area">
-    <div class="completed_tasks_list">
-        <div class="button_show_completed">Show completed</div>
-    </div>
+    <?php endif;?>
 </div>

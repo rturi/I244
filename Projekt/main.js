@@ -20,11 +20,6 @@ window.onload = function() {
 
 
     //http://stackoverflow.com/questions/6658752/click-event-doesnt-work-on-dynamically-generated-elements
-    //$("div.cancel_delete_button").click(function () {
-    //    console.log("cancel delete");
-    //    $(this).parent().html("<div class=\"button_delete\">[delete]</div>");
-    //});
-
     $("div.delete_button_area").on("click", "div.cancel_delete_button", function(){
         console.log("cancel delete");
         $(this).parent().html("<div class=\"button_delete\">[delete]</div>");
@@ -49,7 +44,6 @@ window.onload = function() {
 
         //http://www.w3schools.com/jquery/jquery_ajax_get_post.asp
         $.get("?mode=search&q=" + $(".search_box").val(), function(data, status){
-            //console.log("Data: " + data + "\nStatus: " + status);
 
             $.each($.parseJSON(data), function(idx, obj) {
 
@@ -60,4 +54,51 @@ window.onload = function() {
 
     });
 
+    $("div.completed_tasks").on("load", "div.completed_tasks_list", function(){
+
+    });
+
+    $("div.button_toggle_completed").click(function () {
+
+        var list_id = getUrlParameter('list_id');
+        console.log(list_id);
+
+        window.open("?mode=toggle_completed&list_id=" + list_id,"_self")
+    });
+
+
 }
+
+// from: http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+
+
+//function loadCompletedTasks () {
+//    $("div.completed_tasks_list").html("test2e");
+//
+//    $.get("?mode=tasks&list_id=4", function(data, status){
+//
+//        alert("Data: " + data + "\nStatus: " + status);
+//
+//        $.each($.parseJSON(data), function(idx, obj) {
+//
+//            $(".content").append("<li>" + obj.name);
+//        });
+//
+//    });
+//
+//}

@@ -144,6 +144,11 @@ div.task_name_area {
     float: right;
 }
 
+.completed_tasks_list .task {
+    color: gray;
+    text-decoration: line-through;
+}
+
 
 .error {
     color: red;
