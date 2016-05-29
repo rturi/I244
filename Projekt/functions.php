@@ -142,9 +142,10 @@ function show_login()
 function show_list()
 {
 
-    if (isset($_GET['list_id']) && isLegalListID($_GET['list_id'])) {
+    if (isset($_GET['list_id'])) {
 
-        $active_list_id = ($_GET['list_id']);
+        validateListId($_GET['list_id']);
+        $active_list_id = ($_GET['list_id']); // safe because of list_id validation
 
         global $connection;
         $active_list_tasks = array();
@@ -165,19 +166,16 @@ function show_list()
         include('view/list.html');
         include_once('view/foot.html');
 
-    } else {
-        $_SESSION['errors']['illegal_list_id'] = "The list you are trying to view or change does not exist or belong to you.";
-        header("Location: ?mode=main_page");
-        exit(0);
     }
 
 }
 
 function add_task() {
 
-    if (isset($_GET['list_id']) && isLegalListID($_GET['list_id'])) {
+    if (isset($_GET['list_id'])) {
 
-        $active_list_id = ($_GET['list_id']);
+        validateListId($_GET['list_id']);
+        $active_list_id = ($_GET['list_id']); // safe because of list_id validation
         global $connection;
 
         if (!empty($_POST['name'])) {
@@ -203,13 +201,9 @@ function add_task() {
         }
 
         // no errors: reload original list page with new task
-        header("Location: ?mode=lists&list_id=" . $active_list_id);
+        header("Location: ?mode=lists&list_id=" . htmlspecialchars($active_list_id));
         exit(0);
 
-    } else {
-        $_SESSION['errors']['illegal_list_id'] = "The list you are trying to view or change does not exist or belong to you.";
-        header("Location: ?mode=main_page");
-        exit(0);
     }
 
 }
@@ -221,17 +215,20 @@ function show_list_data()
     include_once('view/foot.html');
 }
 
-function delete_task()
-{
+function delete_task() {
 
     if (isset($_GET['task_id']) && isset($_GET['list_id'])) {
 
-        // ToDo: check GET list_id
         // ToDo: check GET task_id
+        global $connection;
 
+        validateTaskId($_GET['task_id']);
+        $input_list_id = $_GET['task_id'];
+
+        validateListId($_GET['list_id']);
         $input_list_id = $_GET['list_id'];
 
-        global $connection;
+
         $input_task_id = htmlspecialchars($_GET['task_id']);
         $input_list_id = htmlspecialchars($_GET['list_id']);
 
@@ -240,34 +237,70 @@ function delete_task()
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
         if (mysqli_affected_rows($connection) > 0) {
-            header("Location: ?mode=lists&list_id=" . $input_list_id);
+            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
             exit(0);
         } else {
+            $_SESSION['errors']['task_delete_failed'] = "Deleting the task failed, sorry. Please try again.";
+            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+            exit(0);
         }
 
+    } else {
+        $_SESSION['errors']['delete_task_missing_parameters'] = "Missing list or task id in task delete request";
+        header("Location: ?mode=main_page");
+        exit(0);
     }
 
 }
 
 // Checks that list_id is a numeric value with a realistic value and is the id of a current users list
-function isLegalListID($inputID)
-{
+function validateListId($inputID){
 
-    if (!is_numeric($inputID)) return false;
-    if ($inputID < 1 && $inputID > 3000000000000) return false;
+    if (!is_numeric($inputID) || $inputID < 1 || $inputID > 3000000000000) {
+        $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
+        header("Location: ?mode=main_page");
+        exit(0);
+    }
 
     if (!isset($_SESSION['lists'][$inputID])) {
-        echo "what ya doin?";
+        $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
         return false;
     }
-    return true;
+
 }
+
+
+function validateTaskId($inputID){
+
+    if (!is_numeric($inputID) || $inputID < 1 || $inputID > 3000000000000) {
+        $_SESSION['errors']['illegal_task_id'] = "The task you tried to delete does not exist or belong to you.";
+        header("Location: ?mode=main_page");
+        exit(0);
+    }
+
+    global $connection;
+
+    $sql = "SELECT id FROM rturi_tasks WHERE id = " . mysqli_real_escape_string($connection, $inputID) . " AND user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+
+    $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+    if (mysqli_num_rows($result) != 1) {
+        $_SESSION['errors']['task_delete_illegal_task_id'] = "The task you tried to delete does not exist or belong to you";
+        header("Location: ?mode=main_page");
+        exit(0);
+    }
+
+}
+
+
 
 function isLegalTaskName($inputName) {
 
     if(!is_string($inputName)) return false;
 
     if(strlen($inputName) > 1000) return false;
+
+    global $connection;
 
     return true;
 }
