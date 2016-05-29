@@ -1,31 +1,24 @@
-<H1><?php echo htmlspecialchars($_SESSION['lists'][htmlspecialchars($_GET['list_id'])]['name']); ?></H1>
+<H1><?php  echo htmlspecialchars($_SESSION['lists'][htmlspecialchars($_GET['list_id'])]['name']); ?></H1>
 
-<form action="?mode=list&list_id=<?php echo $active_list_id; ?>" method="post">
+<form action="?mode=add_task&list_id=<?php echo $active_list_id; ?>" method="post">
     <table>
         <tr>
             <td><input type="text" name="name" value=""></td>
             <td><input type="submit" value="Add task"></td>
         </tr>
-            <td>
-                <?php if (isset($errors_add_task)):?>
-                <?php foreach($errors_add_task as $error):?>
-                    <div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
-                <?php endforeach;?>
-                <?php endif;?>
-            </td>
-        <tr>
-        </tr>
     </table>
 </form>
-<div class="active_tasks_area">
-    <div class="active_task_list">
-        <ul>
-            <?php foreach ($active_list_tasks as $task) : ?>
-            <div id="<?php echo $task['id']; ?>" class="task"><img src="img/button_done.png" alt="done" class="button_done"> <?php echo $task['name']; ?> <div class="button_delete"> (<a href="?mode=delete_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&list_id=<?php echo htmlspecialchars($active_list_id); ?>">delete</a>)<img src="img/button_delete.png" alt="delete task"></div></div>
-            <?php endforeach; ?>
-        </ul>
+<?php if(isset($active_list_tasks)) :?>
+    <div class="active_tasks_area">
+        <div class="active_task_list">
+            <ul>
+                <?php foreach ($active_list_tasks as $task) : ?>
+                <div id="<?php echo $task['id']; ?>" class="task"><img src="img/button_done.png" alt="done" class="button_done"> <?php echo htmlspecialchars($task['name']); ?> <div class="button_delete"> (<a href="?mode=delete_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&list_id=<?php echo htmlspecialchars($active_list_id); ?>">delete</a>)<img src="img/button_delete.png" alt="delete task"></div></div>
+                <?php endforeach; ?>
+            </ul>
+        </div>
     </div>
-</div>
+<?php endif;?>
 
 
 <div class="completed_tasks_area">

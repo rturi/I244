@@ -144,7 +144,7 @@ div.button_done {
     float: left;
 }
 
-
-.error_message td {
+.error {
     color: red;
+    border: thin;
 }

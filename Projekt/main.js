@@ -21,7 +21,7 @@ window.onload = function() {
         history.pushState(stateObj, "", "?mode=search&key=" + $(".search_box").val());
 
         //http://www.w3schools.com/jquery/jquery_ajax_get_post.asp
-        $.get("?mode=search_json&q=" + $(".search_box").val(), function(data, status){
+        $.get("?mode=search&q=" + $(".search_box").val(), function(data, status){
             //console.log("Data: " + data + "\nStatus: " + status);
 
 

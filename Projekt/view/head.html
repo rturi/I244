@@ -45,6 +45,10 @@
 
 
     <div class="content">
+
+
+        <?php if (isset($_SESSION['errors'])) include('view/error.html'); ?>
+
         <?php if (isset($_SESSION['show_login_message']) && $_SESSION['show_login_message'] == true): ?>
         <p>Sisselogimine õnnestus! </p>
         <?php

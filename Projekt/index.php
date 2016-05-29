@@ -37,8 +37,11 @@ if (isset($_GET['mode'])) {
         case 'search';
             show_search();
             break;
-        case 'search_json':
-            search_json();
+        case 'tasks':
+            tasks();
+            break;
+        case 'add_task';
+            add_task();
             break;
         default:
             show_error('404');
