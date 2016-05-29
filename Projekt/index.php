@@ -62,6 +62,16 @@ if (isset($_GET['mode'])) {
                 toggle_completed();
             } else show_login();
             break;
+        case 'set_task_completed':
+            if (isset($_SESSION['username'])) {
+                set_task_completed();
+            } else show_login();
+            break;
+        case 'set_task_active':
+            if (isset($_SESSION['username'])) {
+                set_task_active();
+            } else show_login();
+            break;
         default:
             $_SESSION['errors']['page_not_found'] = "Sorry could not find the page you asked for";
             show_main_page();

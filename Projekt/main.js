@@ -1,9 +1,9 @@
 window.onload = function() {
 
-    $("div.task img").click(function () {
-        console.log("clicked del " + $(this).parent().attr("id"));
-
-    });
+    //$("div.task img").click(function () {
+    //    console.log("clicked del " + $(this).parent().attr("id"));
+    //
+    //});
 
     $("div.task").dblclick(function () {
        alert("topeltklikk");
@@ -65,6 +65,25 @@ window.onload = function() {
 
         window.open("?mode=toggle_completed&list_id=" + list_id,"_self")
     });
+
+    $("div.done_button").click(function () {
+
+        var list_id = getUrlParameter('list_id');
+        var task_id = $(this).parent().attr("id");
+        console.log("?mode=set_task_completed&list_id=" + list_id + "&task_id=" + task_id);
+
+        window.open("?mode=set_task_completed&list_id=" + list_id + "&task_id=" + task_id, "_self");
+    });
+
+    $("div.undone_button").click(function () {
+
+        var list_id = getUrlParameter('list_id');
+        var task_id = $(this).parent().attr("id");
+        console.log(list_id);
+
+        window.open("?mode=set_task_active&list_id=" + list_id + "&task_id=" + task_id, "_self");
+    });
+
 
 
 }

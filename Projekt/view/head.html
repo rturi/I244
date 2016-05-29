@@ -13,8 +13,9 @@
 <div class="page_container">
 
     <div class="menu">
-
+        <?php if (isset($_SESSION['username'])) : ?>
         <input class="search_box" type="text" placeholder="search...">
+        <?php endif; ?>
 
         <ul>
             <li>

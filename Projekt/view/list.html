@@ -14,7 +14,7 @@
             <div class="active_task_list">
                     <?php foreach ($active_tasks_list as $task) : ?>
                         <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
-                            <div class="done_button_area"><img src="img/button_done.png" alt="done" class="button_done"></div>
+                            <div class="done_button"><img src="img/button_done.png" alt="done" class="button_done"></div>
                             <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
                             <div class="delete_button_area">
                                 <div class="button_delete">[delete]</div>
@@ -39,7 +39,7 @@
             <?php if(isset($completed_tasks_list)) :?>
                 <?php foreach ($completed_tasks_list as $task) : ?>
                     <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
-                        <div class="done_button_area"><img src="img/button_done.png" alt="done" class="button_done"></div>
+                        <div class="undone_button"><img src="img/button_done.png" alt="done" class="button_done"></div>
                         <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
                         <div class="delete_button_area">
                             <div class="button_delete">[delete]</div>
