@@ -35,7 +35,7 @@
             </li>
             <?php foreach($_SESSION['lists'] as $list) : ?>
             <li>
-                <a href="?mode=list&list_id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
+                <a href="?mode=lists&list_id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
             </li>
             <?php endforeach; ?>
             <?php endif; ?>
@@ -46,8 +46,12 @@
 
     <div class="content">
 
-
-        <?php if (isset($_SESSION['errors'])) include('view/error.html'); ?>
+        <?php if (isset($_SESSION['errors'])) : ?>
+            <?php foreach($_SESSION['errors'] as $error):?>
+                <div class="error"><?php echo htmlspecialchars($error); ?></div>
+            <?php endforeach;?>
+            <?php $_SESSION['errors'] = null; ?>
+        <?php endif ?>
 
         <?php if (isset($_SESSION['show_login_message']) && $_SESSION['show_login_message'] == true): ?>
         <p>Sisselogimine õnnestus! </p>

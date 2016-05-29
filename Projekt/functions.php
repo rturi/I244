@@ -142,11 +142,7 @@ function show_login()
 function show_list()
 {
 
-    // ToDo: add upper limit for number of tasks in a list
-
-
     if (isset($_GET['list_id']) && isLegalListID($_GET['list_id'])) {
-
 
         $active_list_id = ($_GET['list_id']);
 
@@ -171,9 +167,8 @@ function show_list()
 
     } else {
         $_SESSION['errors']['illegal_list_id'] = "The list you are trying to view or change does not exist or belong to you.";
-        include_once('view/head.html');
-        include('view/error.html');
-        include_once('view/foot.html');
+        header("Location: ?mode=main_page");
+        exit(0);
     }
 
 }
@@ -191,28 +186,30 @@ function add_task() {
 
                $input_name = htmlspecialchars($_POST['name']);
 
-               $sql = "INSERT INTO rturi_tasks (name, user_id, list_id, last_change) VALUES ('" . mysqli_real_escape_string($connection, $input_name) . "', " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . ", " . $active_list_id . ", '" . date('Y-m-d H:i:s') . "')";
+               $sql = "INSERT INTO rturi_tasks (name, user_id, list_id, last_change) VALUES ('" . mysqli_real_escape_string($connection, $input_name) . "', " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . ", " . mysqli_real_escape_string($connection, $active_list_id) . ", '" . date('Y-m-d H:i:s') . "')";
 
                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
-               if (mysqli_insert_id($connection) == 0) {
-                   $_SESSION['errors']['add_task_insert_failed'] = "Adding your task failed, sorry. Please try again.";
+               if (mysqli_affected_rows($connection) < 1) {
+                   $_SESSION['errors']['add_task_insert_failed'] = "Adding your new task failed, sorry. Please try again.";
                }
+
            } else {
                $_SESSION['errors']['add_task_illegal'] = "Task name can't be longer than 1000 characters.";
            }
+
         } else {
             $_SESSION['errors']['add_task_empty_name'] = "New task has to have a name.";
         }
 
-        header("Location: ?mode=list&list_id=" . $active_list_id);
+        // no errors: reload original list page with new task
+        header("Location: ?mode=lists&list_id=" . $active_list_id);
         exit(0);
 
     } else {
         $_SESSION['errors']['illegal_list_id'] = "The list you are trying to view or change does not exist or belong to you.";
-        include_once('view/head.html');
-        include('view/error.html');
-        include_once('view/foot.html');
+        header("Location: ?mode=main_page");
+        exit(0);
     }
 
 }
@@ -241,7 +238,7 @@ function delete_task()
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
         if (mysqli_affected_rows($connection) > 0) {
-            header("Location: ?mode=list&list_id=" . $input_list_id);
+            header("Location: ?mode=lists&list_id=" . $input_list_id);
             exit(0);
         } else {
             // ToDo: error handling when delete fails
@@ -265,8 +262,12 @@ function isLegalListID($inputID)
     return true;
 }
 
-function isLegalTaskName() {
-    // ToDo
+function isLegalTaskName($inputName) {
+
+    if(!is_string($inputName)) return false;
+
+    if(strlen($inputName) > 1000) return false;
+
     return true;
 }
 
@@ -275,22 +276,6 @@ function show_register()
 {
     include_once('view/head.html');
     include('view/register.html');
-    include_once('view/foot.html');
-}
-
-
-function show_error($error_code)
-{
-    include_once('view/head.html');
-
-    switch ($error_code) {
-        case '404':
-            echo "404 page not found";
-            break;
-        default:
-            echo "something went terribly wrong";
-    }
-
     include_once('view/foot.html');
 }
 

@@ -16,11 +16,15 @@ if (isset($_GET['mode'])) {
         case 'main_page':
             show_main_page();
             break;
-        case 'list';
-            show_list();
+        case 'lists';
+            if (isset($_SESSION['username'])) {
+                show_list();
+            } else show_login();
             break;
         case 'delete_task':
-            delete_task();
+            if (isset($_SESSION['username'])) {
+                delete_task();
+            } else show_main_page();
             break;
         case 'login':
             show_login();
@@ -29,21 +33,32 @@ if (isset($_GET['mode'])) {
             show_register();
             break;
         case 'logout';
-            end_session();
+            if (isset($_SESSION['username'])) {
+                end_session();
+            } else show_main_page();
             break;
         case 'list_data';
-            show_list_data();
+            if (isset($_SESSION['username'])) {
+                show_list_data();
+            } else show_main_page();
             break;
         case 'search';
-            show_search();
+            if (isset($_SESSION['username'])) {
+                show_search();
+            } else show_login();
             break;
         case 'tasks':
-            tasks();
+            if (isset($_SESSION['username'])) {
+                tasks();
+            } else show_main_page();
             break;
         case 'add_task';
-            add_task();
+            if (isset($_SESSION['username'])) {
+                add_task();
+            } else show_login();
             break;
         default:
+            $_SESSION['errors']['page_not_found'] = "Sorry could not find the page you asked for";
             show_error('404');
     }
 } else {
