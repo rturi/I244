@@ -12,11 +12,15 @@
 <?php if(isset($active_list_tasks)) :?>
     <div class="active_tasks_area">
         <div class="active_task_list">
-            <ul>
                 <?php foreach ($active_list_tasks as $task) : ?>
-                <div id="<?php echo $task['id']; ?>" class="task"><img src="img/button_done.png" alt="done" class="button_done"> <?php echo htmlspecialchars($task['name']); ?> <div class="button_delete"> (<a href="?mode=delete_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&list_id=<?php echo htmlspecialchars($active_list_id); ?>">delete</a>)<img src="img/button_delete.png" alt="delete task"></div></div>
+                    <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
+                        <div class="done_button_area"><img src="img/button_done.png" alt="done" class="button_done"></div>
+                        <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
+                        <div class="delete_button_area">
+                            <div class="button_delete">[delete]</div>
+                        </div>
+                    </div>
                 <?php endforeach; ?>
-            </ul>
         </div>
     </div>
 <?php endif;?>

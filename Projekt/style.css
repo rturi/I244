@@ -128,21 +128,22 @@ img:hover.images {
     z-index:5;
 }
 
+/* http://stackoverflow.com/questions/2603700/how-to-align-3-divs-left-center-right-inside-another-div */
 div.task {
     border: solid;
     border-radius: 5px;
     border-width: thin;
     margin-bottom: 1px;
+    display: flex;                   /* establish flex container */
+    flex-direction: row;             /* default value; can be omitted */
+    flex-wrap: nowrap;               /* default value; can be omitted */
+    justify-content: space-between;  /* switched from default (flex-start, see below) */
 }
 
-div.button_delete {
-    position: relative;
+div.task_name_area {
     float: right;
 }
-div.button_done {
-    position: relative;
-    float: left;
-}
+
 
 .error {
     color: red;

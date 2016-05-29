@@ -10,6 +10,33 @@ window.onload = function() {
     });
 
 
+    $("div.button_delete").click(function () {
+
+        var task_id = $(this).parent().parent().attr("id");
+        var list_id = $(this).parent().parent().attr("list_id");
+
+        $(this).parent().html("<div class='delete_task_confirm_button'><a href='?mode=delete_task&task_id=" + task_id + "&list_id=" + list_id + "'>[delete]</a></div><div class='cancel_delete_button'>[cancel]</div>");
+    });
+
+
+    //http://stackoverflow.com/questions/6658752/click-event-doesnt-work-on-dynamically-generated-elements
+    //$("div.cancel_delete_button").click(function () {
+    //    console.log("cancel delete");
+    //    $(this).parent().html("<div class=\"button_delete\">[delete]</div>");
+    //});
+
+    $("div.delete_button_area").on("click", "div.cancel_delete_button", function(){
+        console.log("cancel delete");
+        $(this).parent().html("<div class=\"button_delete\">[delete]</div>");
+    });
+
+    $("div.delete_button_area").on("click", "div.button_delete", function(){
+        var task_id = $(this).parent().parent().attr("id");
+        var list_id = $(this).parent().parent().attr("list_id");
+
+        $(this).parent().html("<div class='delete_task_confirm_button'><a href='?mode=delete_task&task_id=" + task_id + "&list_id=" + list_id + "'>[delete]</a></div><div class='cancel_delete_button'>[cancel]</div>");
+    });
+
 
     $(".search_box").keyup(function () {
 
@@ -24,13 +51,10 @@ window.onload = function() {
         $.get("?mode=search&q=" + $(".search_box").val(), function(data, status){
             //console.log("Data: " + data + "\nStatus: " + status);
 
-
-
             $.each($.parseJSON(data), function(idx, obj) {
 
                 $(".content").append("<li>" + obj.name);
             });
-
 
         });
 

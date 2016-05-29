@@ -149,7 +149,7 @@ function show_list()
         global $connection;
         $active_list_tasks = array();
 
-        $sql = "SELECT id, name, info, due_time, status FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND list_id = " . mysqli_real_escape_string($connection, $active_list_id);
+        $sql = "SELECT id, name, info, due_time, status, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND list_id = " . mysqli_real_escape_string($connection, $active_list_id);
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
@@ -224,10 +224,12 @@ function show_list_data()
 function delete_task()
 {
 
-    if (isset($_GET['task_id'])) {
+    if (isset($_GET['task_id']) && isset($_GET['list_id'])) {
 
         // ToDo: check GET list_id
         // ToDo: check GET task_id
+
+        $input_list_id = $_GET['list_id'];
 
         global $connection;
         $input_task_id = htmlspecialchars($_GET['task_id']);
@@ -241,7 +243,6 @@ function delete_task()
             header("Location: ?mode=lists&list_id=" . $input_list_id);
             exit(0);
         } else {
-            // ToDo: error handling when delete fails
         }
 
     }
