@@ -84,8 +84,20 @@ window.onload = function() {
         window.open("?mode=set_task_active&list_id=" + list_id + "&task_id=" + task_id, "_self");
     });
 
+    // sets task name max width to get 'text-overflow: ellipsis;' to work right
+    $(".task_name_area").css("width", window.innerWidth - 290);
 
 
+}
+
+
+// sets task name max width to get 'text-overflow: ellipsis;' to work right
+// idea from: http://stackoverflow.com/questions/9828831/jquery-on-window-resize
+window.onresize = function() {
+    if (window.innerWidth > 500) {
+        $(".task_name_area").css("width", window.innerWidth - 290);
+        console.log("resize");
+    }
 }
 
 // from: http://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js

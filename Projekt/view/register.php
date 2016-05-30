@@ -2,7 +2,7 @@
     <table>
         <tr>
             <td>User name</td>
-            <td><input type="text" name="user"></td>
+            <td><input type="text" name="user" <?php if (isset($inputUserName)) echo "value=\"" . htmlspecialchars($inputUserName) . "\""?>></td>
         </tr>
         <tr>
             <td>Password</td>

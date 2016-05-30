@@ -14,7 +14,7 @@
 
     <div class="menu">
         <?php if (isset($_SESSION['username'])) : ?>
-        <input class="search_box" type="text" placeholder="search...">
+        <input class="search_box" type="text" placeholder="Search tasks...">
         <?php endif; ?>
 
         <ul>
@@ -32,8 +32,9 @@
             <?php endif; ?>
             <?php if (isset($_SESSION['username'])) : ?>
             <li>
-                <a href="?mode=logout">Logi välja</a>
+                <a href="?mode=logout">Log out</a>
             </li>
+            <p>Your lists</p>
             <?php foreach($_SESSION['lists'] as $list) : ?>
             <li>
                 <a href="?mode=lists&list_id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
@@ -47,19 +48,16 @@
 
     <div class="content">
 
+        <div class="title_area">
+        <?php if(isset($page_title)) echo $page_title?>
+        </div>
+
         <?php if (isset($_SESSION['errors'])) : ?>
             <?php foreach($_SESSION['errors'] as $error):?>
                 <div class="error"><?php echo htmlspecialchars($error); ?></div>
             <?php endforeach;?>
             <?php $_SESSION['errors'] = null; ?>
         <?php endif ?>
-
-        <?php if (isset($_SESSION['show_login_message']) && $_SESSION['show_login_message'] == true): ?>
-        <p>Sisselogimine õnnestus! </p>
-        <?php
-            $_SESSION['show_login_message'] = false;
-            endif;
-        ?>
 
         <?php if (isset($_SESSION['messages'])) : ?>
             <?php foreach($_SESSION['messages'] as $message):?>

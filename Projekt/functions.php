@@ -26,7 +26,7 @@ function connect_db() {
 
 
 function show_main_page() {
-    include_once('view/head.html');
+    include_once('view/head.php');
     include('view/main_page.html');
     include_once('view/foot.html');
 }
@@ -59,7 +59,7 @@ function get_user_lists($user_id) {
 function show_search()
 {
 
-    include_once('view/head.html');
+    include_once('view/head.php');
     include('view/search.html');
     include_once('view/foot.html');
 }
@@ -100,7 +100,7 @@ function show_login()
 
 
     }
-    include_once('view/head.html');
+    include_once('view/head.php');
     include('view/login.html');
     include_once('view/foot.html');
 }
@@ -149,6 +149,7 @@ function show_list() {
         exit(0);
         }
         $active_list_id = ($_GET['list_id']); // safe because of list_id validation
+        $page_title = htmlspecialchars($_SESSION['lists'][$active_list_id]['name']);
 
         global $connection;
 
@@ -174,8 +175,8 @@ function show_list() {
             }
         }
 
-        include_once('view/head.html');
-        include('view/list.html');
+        include_once('view/head.php');
+        include('view/list.php');
         include_once('view/foot.html');
 
     }
@@ -228,7 +229,7 @@ function add_task()
 
 function show_list_data()
 {
-    include_once('view/head.html');
+    include_once('view/head.php');
     include('view/show_list_data.html');
     include_once('view/foot.html');
 }
@@ -379,6 +380,8 @@ function set_task_completed() {
 
 function show_register() {
 
+    global $connection;
+
     if(!empty($_POST)) {
 
         if(empty($_POST['user'])) {
@@ -386,10 +389,9 @@ function show_register() {
         } else {
             if(isLegitRegUsername($_POST['user'])) {
                 $inputUserName = $_POST['user'];
-            } else {
-                $_SESSION['errors']['register_unlegit_username'] = "Username should be 3 - 500 characters long and can consist only of english alphabet letters and numbers";
             }
         }
+
 
         if(empty($_POST['password'])) {
             $_SESSION['errors']['register_empty_password'] = "Please enter a password";
@@ -409,17 +411,15 @@ function show_register() {
             $_SESSION['errors']['register_passwords_do_not_match'] = "Entered passwords don't match";
         }
 
+        if(empty($_SESSION['errors'])) {
+            $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
 
-        global $connection;
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
-        $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
-
-        $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-
-        if (mysqli_num_rows($result) > 0) {
-            $_SESSION['errors']['register_username_taken'] = "That name is already taken, sorry.";
+            if (mysqli_num_rows($result) > 0) {
+                $_SESSION['errors']['register_username_taken'] = "That name is already taken, sorry.";
+            }
         }
-
 
         if(empty($_SESSION['errors'])) {
 
@@ -428,17 +428,24 @@ function show_register() {
 
             $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
-            $_SESSION['errors']['test'] = mysqli_affected_rows($result);
 
             if (mysqli_affected_rows($connection) < 1) {
                 $_SESSION['errors']['register_db_insert_failed'] = "Creating your new user failed. Sorry. Please try again.";
                 header("Location: ?mode=register");
                 exit(0);
+            } else { // generate first list for new user
+
+                // get the user_id of the new user
+                $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+                // ToDo: there should be a try-catch here
+                $row = mysqli_fetch_assoc($result);
+
+                $new_user_id = $row['id'];
+
+                $sql = "INSERT INTO rturi_lists (name, user_id) VALUES ('My tasks', " . mysqli_real_escape_string($connection, $new_user_id) . "), ('Shopping', " . mysqli_real_escape_string($connection, $new_user_id) . ")";
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
             }
-
-
-            // ToDo: create first list
-            $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
 
 
             $_SESSION['messages']['register_success'] = "Congratulations, you have successfully created your new account! Log in and start todoing.";
@@ -448,9 +455,8 @@ function show_register() {
 
     }
 
-
-    include_once('view/head.html');
-    include('view/register.html');
+    include_once('view/head.php');
+    include('view/register.php');
     include_once('view/foot.html');
 }
 
@@ -496,15 +502,54 @@ function isLegitTaskName($inputName)
     return true;
 }
 
-function isLegitRegUsername ($inputPassword) {
+function isLegitRegUsername ($inputName) {
 
-    if ($inputPassword != htmlspecialchars($inputPassword)) return false;
+    if(strlen($inputName) < 3) {
+        $_SESSION['errors']['register_username_too_short'] = "Username must be at least 3 characters long";
+        return false;
+    }
+
+    if(strlen($inputName) > 500) {
+        $_SESSION['errors']['register_username_too_long'] = "Username can't be longer than 500 characters";
+        return false;
+    }
+
+    if ($inputName != htmlspecialchars($inputName)) {
+        $_SESSION['errors']['register_username_special_chars'] = "Username can only contain numbers and letters";
+        return false;
+    }
+
+    if ($inputName != htmlspecialchars($inputName)) {
+        $_SESSION['errors']['register_username_special_chars'] = "Username can only contain numbers and letters";
+        return false;
+    }
 
     return true;
 }
 
 
-function isLegitRegPassword () {
+function isLegitRegPassword ($inputPassword) {
+
+    if(strlen($inputPassword) < 5) {
+        $_SESSION['errors']['register_password_too_short'] = "Password must be at least 5 characters long";
+        return false;
+    }
+
+    if(strlen($inputPassword) > 500) {
+        $_SESSION['errors']['register_password_too_long'] = "Password can't be longer than 500 characters";
+        return false;
+    }
+
+    if ($inputPassword != htmlspecialchars($inputPassword)) {
+        $_SESSION['errors']['register_password_special_chars'] = "Password can only contain numbers and letters";
+        return false;
+    }
+
+    if ($inputPassword != htmlspecialchars($inputPassword)) {
+        $_SESSION['errors']['register_password_special_chars'] = "Password can only contain numbers and letters";
+        return false;
+    }
+
     return true;
 }
 

@@ -1,9 +1,7 @@
-<H1><?php  echo htmlspecialchars($_SESSION['lists'][htmlspecialchars($_GET['list_id'])]['name']); ?></H1>
-
 <form action="?mode=add_task&list_id=<?php echo $active_list_id; ?>" method="post">
     <table>
         <tr>
-            <td><input type="text" name="name" value=""></td>
+            <td><input type="text" name="name" maxlength="100"></td>
             <td><input type="submit" value="Add task"></td>
         </tr>
     </table>
