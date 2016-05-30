@@ -60,3 +60,11 @@
             $_SESSION['show_login_message'] = false;
             endif;
         ?>
+
+        <?php if (isset($_SESSION['messages'])) : ?>
+            <?php foreach($_SESSION['messages'] as $message):?>
+                <div class="message"><?php echo htmlspecialchars($message); ?></div>
+            <?php endforeach;?>
+            <?php $_SESSION['messages'] = null; ?>
+        <?php endif ?>
+

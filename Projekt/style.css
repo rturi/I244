@@ -152,5 +152,14 @@ div.task_name_area {
 
 .error {
     color: red;
+    border-radius: 5px;
+    border-width: thin;
     border: thin;
+ }
+
+.message {
+    color: blue;
+    border: thin;
+    border-radius: 5px;
+    border-width: thin;
 }

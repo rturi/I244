@@ -400,7 +400,50 @@ function show_register() {
         }
 
         if(empty($_POST['re_password'])) {
-            $_SESSION['errors']['register_empty_re_password'] = "Please retype the same password";
+            $_SESSION['errors']['register_empty_re_password'] = "Please fill the 'repeat password' field";
+        } if (isLegitRegPassword($_POST['password'])) {
+            $inputRePassword = $_POST['re_password'];
+        }
+
+        if(empty($_SESSION['errors']) && $inputPassword != $inputRePassword) {
+            $_SESSION['errors']['register_passwords_do_not_match'] = "Entered passwords don't match";
+        }
+
+
+        global $connection;
+
+        $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
+
+        $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+        if (mysqli_num_rows($result) > 0) {
+            $_SESSION['errors']['register_username_taken'] = "That name is already taken, sorry.";
+        }
+
+
+        if(empty($_SESSION['errors'])) {
+
+
+            $sql = "INSERT INTO `rturi_users`(username, passw) VALUES ('" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "',SHA1('" . mysqli_real_escape_string($connection, ($inputPassword)) . "'))";
+
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+            $_SESSION['errors']['test'] = mysqli_affected_rows($result);
+
+            if (mysqli_affected_rows($connection) < 1) {
+                $_SESSION['errors']['register_db_insert_failed'] = "Creating your new user failed. Sorry. Please try again.";
+                header("Location: ?mode=register");
+                exit(0);
+            }
+
+
+            // ToDo: create first list
+            $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
+
+
+            $_SESSION['messages']['register_success'] = "Congratulations, you have successfully created your new account! Log in and start todoing.";
+            header("Location: ?mode=main_page");
+            exit(0);
         }
 
     }
@@ -453,7 +496,10 @@ function isLegitTaskName($inputName)
     return true;
 }
 
-function isLegitRegUsername () {
+function isLegitRegUsername ($inputPassword) {
+
+    if ($inputPassword != htmlspecialchars($inputPassword)) return false;
+
     return true;
 }
 
