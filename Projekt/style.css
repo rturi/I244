@@ -61,8 +61,14 @@ div.content {
 
 .title_area {
     height: 40px;
-    font-size: 20pt;
-    background-color: lightgoldenrodyellow;
+    background-color: midnightblue;
+}
+
+.title_area h1 {
+    font-size: 18pt;
+    margin-left: 10px;
+    /*margin-top: px;*/
+    color: white;
 }
 
 div.task {
@@ -75,6 +81,18 @@ div.task {
     margin-left: 7px;
     margin-right: 7px;
     background-color: white;
+}
+
+
+div.edit_task_area {
+    border: solid;
+    border-radius: 3px;
+    border-width: thin;
+    border-color: goldenrod;
+    height: 150px;
+    margin-left: 11px;
+    margin-right: 11px;
+    background-color: ivory;
 }
 
 .done_button {
@@ -104,12 +122,44 @@ div.task {
     width: 100%;
 }
 
-.delete_button_area {
+.edit_task_button {
     position:relative;
     float: right;
-    top: 7px;
-    right: 7px;
+    top: 4px;
+    right: 5px;
 }
+
+/* generated with http://css3buttongenerator.com/ */
+.edit_task_button {
+    background: #a0afba;
+    background-image: -webkit-linear-gradient(top, #a0afba, #667f8f);
+    background-image: -moz-linear-gradient(top, #a0afba, #667f8f);
+    background-image: -ms-linear-gradient(top, #a0afba, #667f8f);
+    background-image: -o-linear-gradient(top, #a0afba, #667f8f);
+    background-image: linear-gradient(to bottom, #a0afba, #667f8f);
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 6px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 6px 12px 6px 12px;
+    text-decoration: none;
+}
+
+/* generated with http://css3buttongenerator.com/ */
+.edit_task_button:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}
+
+
+
 
 .completed_tasks_list .task {
     color: gray;

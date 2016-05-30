@@ -49,7 +49,7 @@
     <div class="content">
 
         <div class="title_area">
-        <?php if(isset($page_title)) echo $page_title?>
+            <?php if(isset($page_title)) echo "<h1>" . $page_title . "</h1>"; ?>
         </div>
 
         <?php if (isset($_SESSION['errors'])) : ?>
