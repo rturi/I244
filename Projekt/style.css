@@ -129,8 +129,29 @@ div.edit_task_area {
     right: 5px;
 }
 
+
+.delete_task_confirm_button {
+    position: relative;
+    float: left;
+}
+
+.delete_task_cancel_button {
+    position: relative;
+    float: left;
+}
+
+.delete_task_button {
+    position: relative;
+    float: left;
+}
+
+.save_task_button {
+    position: relative;
+    float: right;
+}
+
 /* generated with http://css3buttongenerator.com/ */
-.edit_task_button {
+.neutral_button {
     background: #a0afba;
     background-image: -webkit-linear-gradient(top, #a0afba, #667f8f);
     background-image: -moz-linear-gradient(top, #a0afba, #667f8f);
@@ -148,7 +169,7 @@ div.edit_task_area {
 }
 
 /* generated with http://css3buttongenerator.com/ */
-.edit_task_button:hover {
+.neutral_button:hover {
     background: #3cb0fd;
     background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
     background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
@@ -157,6 +178,65 @@ div.edit_task_area {
     background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
     text-decoration: none;
 }
+
+
+.neg_button {
+    background: #d94d34;
+    background-image: -webkit-linear-gradient(top, #d94d34, #b52222);
+    background-image: -moz-linear-gradient(top, #d94d34, #b52222);
+    background-image: -ms-linear-gradient(top, #d94d34, #b52222);
+    background-image: -o-linear-gradient(top, #d94d34, #b52222);
+    background-image: linear-gradient(to bottom, #d94d34, #b52222);
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 6px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 6px 12px 6px 12px;
+    text-decoration: none;
+}
+
+/* generated with http://css3buttongenerator.com/ */
+.neg_button:hover {
+    background: #f75454;
+    background-image: -webkit-linear-gradient(top, #f75454, #ff5757);
+    background-image: -moz-linear-gradient(top, #f75454, #ff5757);
+    background-image: -ms-linear-gradient(top, #f75454, #ff5757);
+    background-image: -o-linear-gradient(top, #f75454, #ff5757);
+    background-image: linear-gradient(to bottom, #f75454, #ff5757);
+    text-decoration: none;
+}
+
+
+.pos_button {
+    background: #44b330;
+    background-image: -webkit-linear-gradient(top, #44b330, #27872a);
+    background-image: -moz-linear-gradient(top, #44b330, #27872a);
+    background-image: -ms-linear-gradient(top, #44b330, #27872a);
+    background-image: -o-linear-gradient(top, #44b330, #27872a);
+    background-image: linear-gradient(to bottom, #44b330, #27872a);
+    -webkit-border-radius: 6;
+    -moz-border-radius: 6;
+    border-radius: 6px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 13px;
+    padding: 6px 12px 6px 12px;
+    text-decoration: none;
+}
+
+/* generated with http://css3buttongenerator.com/ */
+.pos_button:hover {
+    background: #30bd26;
+    background-image: -webkit-linear-gradient(top, #30bd26, #47ab2b);
+    background-image: -moz-linear-gradient(top, #30bd26, #47ab2b);
+    background-image: -ms-linear-gradient(top, #30bd26, #47ab2b);
+    background-image: -o-linear-gradient(top, #30bd26, #47ab2b);
+    background-image: linear-gradient(to bottom, #30bd26, #47ab2b);
+    text-decoration: none;
+}
+
 
 
 

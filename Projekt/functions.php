@@ -98,7 +98,6 @@ function show_login()
             }
         }
 
-
     }
     include_once('view/head.php');
     include('view/login.html');

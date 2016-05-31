@@ -11,20 +11,19 @@
         <?php if(isset($active_tasks_list)) :?>
             <div class="active_task_list">
                     <?php foreach ($active_tasks_list as $task) : ?>
-                        <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
+                        <div id="<?php echo htmlspecialchars($task['id']); ?>" class="task">
                             <div class="done_button"><img src="img/button_done.png" alt="done" class="button_done"></div>
                             <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
-                            <div class="edit_task_button">Edit</div>
+                            <div class="edit_task_button neutral_button">Edit</div>
                         </div>
                         <div class="edit_task_area" style="display: none;">
-                            <form action="?mode=edit_task&list_id=<?php echo $active_list_id; ?>" method="post">
+                            <form action="?mode=edit_task&task_id=<?php echo htmlspecialchars($task['id']); ?>" method="post">
                                 <table>
                                     <tr>
                                         <td><textarea rows="4" cols="50">ipsum lupsum</textarea></td>
                                     </tr>
                                     <tr>
-                                        <td>[save] [delete task]</td>
-                                    </tr>
+                                        <td><div class="pos_button save_task_button">Save</div> <div class="delete_task_button_area"><div class="neg_button delete_task_button">Delete</div></div></td>                                    </tr>
                                 </table>
                             </form>
                         </div>
@@ -46,19 +45,19 @@
         <div class="completed_tasks_list">
             <?php if(isset($completed_tasks_list)) :?>
                 <?php foreach ($completed_tasks_list as $task) : ?>
-                    <div id="<?php echo htmlspecialchars($task['id']); ?>" list_id="<?php echo htmlspecialchars($task['list_id']); ?>" class="task">
+                    <div id="<?php echo htmlspecialchars($task['id']); ?>" class="task">
                         <div class="undone_button"><img src="img/button_done.png" alt="done" class="button_done"></div>
                         <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
-                        <div class="edit_task_button">Edit</div>
+                        <div class="edit_task_button neutral_button">Edit</div>
                     </div>
                     <div class="edit_task_area" style="display: none;">
-                        <form action="?mode=add_task&list_id=<?php echo $active_list_id; ?>" method="post">
+                        <form action="?mode=edit_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&list_id=<?php echo $active_list_id; ?>" method="post">
                             <table>
                                 <tr>
                                     <td><textarea rows="4" cols="50">ipsum lupsum</textarea></td>
                                 </tr>
                                 <tr>
-                                    <td>[save] [delete task]</td>
+                                    <td><div class="pos_button save_task_button">Save</div> <div class="delete_task_button_area"><div class="neg_button delete_task_button">Delete</div></div></td>
                                 </tr>
                             </table>
                         </form>
