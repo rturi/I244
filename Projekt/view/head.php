@@ -34,15 +34,17 @@
             <li>
                 <a href="?mode=logout">Log out</a>
             </li>
-            <p>Your lists</p>
+        </ul>
+        <span class="menu_intermission">Your lists</span>
+        <ul>
             <?php foreach($_SESSION['lists'] as $list) : ?>
             <li>
                 <a href="?mode=lists&list_id=<?php echo htmlspecialchars($list['id']); ?>"><?php echo htmlspecialchars($list['name']); ?></a>
             </li>
             <?php endforeach; ?>
             <?php endif; ?>
-
         </ul>
+
     </div>
 
 

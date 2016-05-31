@@ -19,6 +19,27 @@ window.onload = function() {
     });
 
 
+    $("div.task").dblclick(function () {
+
+        $(this).next().toggle();
+    });
+
+
+
+    //$("div.save_task_button").click(function () {
+    //
+    //    var task_id = $(this).closest(".edit_task_area").prev().attr("id");
+    //    var mode = getUrlParameter('mode');
+    //
+    //    console.log("test");
+    //
+    //    if (mode == "lists") {
+    //
+    //        var list_id = getUrlParameter('list_id');
+    //        window.open("?mode=edit_task&list_id=" + list_id + "&task_id=" + task_id,"_self")
+    //    }
+    //});
+
     $("div.delete_task_button_area").on("click", "div.delete_task_button", function(){
         $(this).parent().html("<div class=\"delete_task_confirm_button pos_button\">Delete</div><div class=\"delete_task_cancel_button neg_button\">Cancel</div>");
     });
@@ -76,7 +97,7 @@ window.onload = function() {
     });
 
     // sets task name max width to get 'text-overflow: ellipsis;' to work right
-    $(".task_name_area").css("width", window.innerWidth - 290);
+    $(".task_name_area").css("width", window.innerWidth - 355);
 
 
     $(".search_box").keyup(function () {
@@ -109,7 +130,7 @@ window.onload = function() {
 // idea from: http://stackoverflow.com/questions/9828831/jquery-on-window-resize
 window.onresize = function() {
     if (window.innerWidth > 500) {
-        $(".task_name_area").css("width", window.innerWidth - 290);
+        $(".task_name_area").css("width", window.innerWidth - 355);
         console.log("resize");
     }
 }

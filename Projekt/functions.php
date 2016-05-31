@@ -202,7 +202,7 @@ function add_task()
 
                 $input_name = htmlspecialchars($_POST['name']);
 
-                $sql = "INSERT INTO rturi_tasks (name, user_id, list_id, last_change) VALUES ('" . mysqli_real_escape_string($connection, $input_name) . "', " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . ", " . mysqli_real_escape_string($connection, $active_list_id) . ", '" . date('Y-m-d H:i:s') . "')";
+                $sql = "INSERT INTO rturi_tasks (name, user_id, list_id, created, last_change) VALUES ('" . mysqli_real_escape_string($connection, $input_name) . "', " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . ", " . mysqli_real_escape_string($connection, $active_list_id) . ", '" . date('Y-m-d H:i:s') . "', '" . date('Y-m-d H:i:s') . "')";
 
                 $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
@@ -222,15 +222,78 @@ function add_task()
         header("Location: ?mode=lists&list_id=" . htmlspecialchars($active_list_id));
         exit(0);
 
+    } else {
+        $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
+        header("Location: ?mode=main_page");
+        exit(0);
     }
 
 }
 
-function show_list_data()
-{
-    include_once('view/head.php');
-    include('view/show_list_data.html');
-    include_once('view/foot.html');
+function edit_task() {
+
+
+    if (isset($_GET['task_id'])) {
+
+        $active_task_id = $_GET['task_id'];
+
+        if(isLegitTaskId($active_task_id)) {
+
+            if(!empty($_POST)) {
+
+                global $connection;
+                $input_info = '';
+                $input_due_time = '';
+
+                if(!empty($_POST['name'])) {
+                    if(isLegitTaskName($_POST['name'])) {
+                        $input_name = mysqli_real_escape_string($connection, htmlspecialchars($_POST['name']));
+                    }
+                } else {
+                    $_SESSION['errors']['edit_task_empty_name'] = "Task name can't be empty";
+                }
+
+                if(!empty($_POST['info'])) {
+                    if(isLegitTaskInfo($_POST['info'])){
+                        $input_info = ", info = '" . mysqli_real_escape_string($connection, htmlspecialchars($_POST['info'])) . "'";
+                    }
+                }
+
+                if(!empty($_POST['due_time'])) {
+                    if(isLegitTaskDueTime($_POST['due_time'])){
+                        $input_due_time = ", due_time = '" . mysqli_real_escape_string($connection, htmlspecialchars($_POST['due_time'])) . "'";
+                    }
+                }
+
+                if(!isset($_SESSION['errors'])) {
+
+                    $sql = "UPDATE rturi_tasks SET name = '" . $input_name . "'" . $input_info . $input_due_time . " WHERE id = " . mysqli_real_escape_string($connection, htmlspecialchars($active_task_id)) . " AND user_id = " . mysqli_real_escape_string($connection, htmlspecialchars($_SESSION['user_id']));
+                    mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+                }
+
+            }
+
+            if ($_GET['source'] == "list") {
+
+                $sql = "SELECT list_id FROM rturi_tasks WHERE id = ". mysqli_real_escape_string($connection, $active_task_id);
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+                $row = mysqli_fetch_assoc($result);
+
+                header("Location: ?mode=lists&list_id=4");
+                exit(0);
+
+            }
+
+        } else {
+            $_SESSION['errors']['illegal_task_id'] = "The task you tried to delete does not exist or belong to you.";
+            header("Location: ?mode=main_page");
+            exit(0);
+        }
+
+
+    }
+
 }
 
 function delete_task() {
@@ -244,14 +307,14 @@ function delete_task() {
         header("Location: ?mode=main_page");
         exit(0);
         }
-        $input_list_id = htmlspecialchars($_GET['list_id']);
+        $input_task_id = htmlspecialchars($_GET['task_id']);
 
         if (!isLegitListId($_GET['list_id'])) {
             $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
             header("Location: ?mode=main_page");
             exit(0);
         }
-        $input_task_id = htmlspecialchars($_GET['task_id']);
+        $input_list_id = htmlspecialchars($_GET['list_id']);
 
         $sql = "DELETE FROM rturi_tasks WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
 
@@ -322,7 +385,6 @@ function set_task_active() {
         }
         $input_task_id = htmlspecialchars($_GET['task_id']);
 
-        //$sql = "UPDATE FROM rturi_tasks WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
         $sql = "UPDATE rturi_tasks SET status = 1 WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
@@ -360,7 +422,6 @@ function set_task_completed() {
 
         global $connection;
 
-        //$sql = "UPDATE FROM rturi_tasks WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
         $sql = "UPDATE rturi_tasks SET status = 0 WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
@@ -464,7 +525,9 @@ function isLegitListId($inputID) {
 
     if (!is_numeric($inputID) || $inputID < 1 || $inputID > 3000000000000) return false;
 
-    if (!isset($_SESSION['lists'][$inputID])) return false;
+    if (!isset($_SESSION['lists'][$inputID])) {
+        return false;
+    }
 
     return true;
 
@@ -552,6 +615,37 @@ function isLegitRegPassword ($inputPassword) {
     return true;
 }
 
+function isLegitTaskDueTime ($inputTime) {
+
+    if(strlen($inputTime) > 15) {
+        $_SESSION['errors']['edit_task_illegal_date'] = "Incorrect date format.";
+        return false;
+    }
+
+    http://stackoverflow.com/questions/12030810/php-date-validation
+    $test_arr  = explode('-', $inputTime);
+    if (count($test_arr) == 3) {
+        if (!checkdate($test_arr[1], $test_arr[2], $test_arr[0])) {
+            $_SESSION['errors']['edit_task_illegal_date'] = "Incorrect date format ";
+            return false;
+        }
+    } else {
+        $_SESSION['errors']['edit_task_illegal_date'] = "Incorrect date format";
+        return false;
+    }
+
+    return true;
+}
+
+function isLegitTaskInfo ($inputInfo) {
+
+
+    if (strlen($inputInfo) > 5000) {
+        $_SESSION['errors']['edit_task_info_too_long'] = "Additional info can be upto 5000 characters long";
+    }
+
+    return true;
+}
 
 
 ?>

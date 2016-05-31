@@ -37,11 +37,6 @@ if (isset($_GET['mode'])) {
                 end_session();
             } else show_main_page();
             break;
-        case 'list_data';
-            if (isset($_SESSION['username'])) {
-                show_list_data();
-            } else show_main_page();
-            break;
         case 'search';
             if (isset($_SESSION['username'])) {
                 show_search();
@@ -55,6 +50,11 @@ if (isset($_GET['mode'])) {
         case 'add_task':
             if (isset($_SESSION['username'])) {
                 add_task();
+            } else show_login();
+            break;
+        case 'edit_task':
+            if (isset($_SESSION['username'])) {
+                edit_task();
             } else show_login();
             break;
         case 'toggle_completed':

@@ -24,7 +24,7 @@ div.menu {
     background-color: ivory;
 }
 
-.menu ul {
+.menu  ul {
     display: block;
     list-style-type: none;
 }
@@ -45,7 +45,7 @@ div.menu {
     background-color: dimgray;
 }
 
-.menu p {
+.menu .menu_intermission {
     font-size: 14pt;
 }
 
@@ -127,6 +127,16 @@ div.edit_task_area {
     float: right;
     top: 4px;
     right: 5px;
+}
+
+.task_due_date {
+    position:relative;
+    float: left;
+    left: 20px;
+    top: 10px;
+    font-size: small;
+    font-style: italic;
+    color: #667f8f;
 }
 
 
