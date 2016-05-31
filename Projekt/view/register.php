@@ -1,3 +1,4 @@
+<div class="content_block">
 <form action="?mode=register" method="post">
     <table>
         <tr>
@@ -18,3 +19,4 @@
         </tr>
     </table>
 </form>
+</div>

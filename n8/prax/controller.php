@@ -24,7 +24,7 @@ if (isset($_GET['mode'])) {
             $mainContentView = 'view/img_upload.html';
             break;
         case 'login':
-            $mainContentView = 'view/login.html';
+            $mainContentView = 'view/login.php';
             break;
         case 'register':
             $mainContentView = 'view/register.html';

@@ -1,3 +1,4 @@
+<div class="content_block">
 <form action="?mode=login" method="post">
     <table>
         <tr>
@@ -6,11 +7,6 @@
         </tr>
             <td>Password</td>
             <td><input type="password" name="password"></td>
-        <?php if (isset($errors)):?>
-        <?php foreach($errors as $error):?>
-        <div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
-        <?php endforeach;?>
-        <?php endif;?>
         </tr>
         <tr>
             <td></td>
@@ -18,3 +14,4 @@
         </tr>
     </table>
 </form>
+</div>

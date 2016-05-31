@@ -27,7 +27,7 @@ function connect_db() {
 
 function show_main_page() {
     include_once('view/head.php');
-    include('view/main_page.html');
+    include('view/main_page.php');
     include_once('view/foot.html');
 }
 
@@ -100,7 +100,7 @@ function show_login()
 
     }
     include_once('view/head.php');
-    include('view/login.html');
+    include('view/login.php');
     include_once('view/foot.html');
 }
 
@@ -267,7 +267,7 @@ function edit_task() {
 
                 if(!isset($_SESSION['errors'])) {
 
-                    $sql = "UPDATE rturi_tasks SET name = '" . $input_name . "'" . $input_info . $input_due_time . " WHERE id = " . mysqli_real_escape_string($connection, htmlspecialchars($active_task_id)) . " AND user_id = " . mysqli_real_escape_string($connection, htmlspecialchars($_SESSION['user_id']));
+                    $sql = "UPDATE rturi_tasks SET last_change = '" . date('Y-m-d H:i:s') . "', name = '" . $input_name . "'" . $input_info . $input_due_time . " WHERE id = " . mysqli_real_escape_string($connection, htmlspecialchars($active_task_id)) . " AND user_id = " . mysqli_real_escape_string($connection, htmlspecialchars($_SESSION['user_id']));
                     mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
                 }
@@ -385,7 +385,7 @@ function set_task_active() {
         }
         $input_task_id = htmlspecialchars($_GET['task_id']);
 
-        $sql = "UPDATE rturi_tasks SET status = 1 WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+        $sql = "UPDATE rturi_tasks SET status = 1, last_change = '" . date('Y-m-d H:i:s') . "' WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
@@ -422,7 +422,7 @@ function set_task_completed() {
 
         global $connection;
 
-        $sql = "UPDATE rturi_tasks SET status = 0 WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+        $sql = "UPDATE rturi_tasks SET status = 0, last_change = '" . date('Y-m-d H:i:s') . "' WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 

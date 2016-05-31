@@ -16,7 +16,7 @@ $images = array(
 $error_messages = array();
 
 $mode = 'main_page';
-$mainContentView = 'view/main_page.html';
+$mainContentView = 'view/main_page.php';
 if (isset($_GET['mode'])) {
     $mode = $_GET['mode'];
     switch($mode) {

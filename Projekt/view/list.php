@@ -1,8 +1,8 @@
-<form action="?mode=add_task&list_id=<?php echo $active_list_id; ?>" method="post">
+<form class="add_task_form" action="?mode=add_task&list_id=<?php echo $active_list_id; ?>" method="post">
     <table>
         <tr>
-            <td><input type="text" name="name" maxlength="500"></td>
-            <td><input type="submit" value="Add task"></td>
+            <td><input class="add_box" type="text" name="name" maxlength="500"></td>
+            <td><input class="neutral_button" style="border: none" type="submit" value="Add task"></td>
         </tr>
     </table>
 </form>
@@ -48,18 +48,17 @@
         <?php endif;?>
     </div>
 
-<br><br>
 <div class="completed_tasks_area">
     <?php if (!isset($_SESSION['show_completed_tasks'])) : ?>
-        <div class="button_toggle_completed">[Show completed]</div>
+        <div class="button_toggle_completed neutral_button">Show completed</div>
     <?php else : ?>
-        <div class="button_toggle_completed">[Hide completed]</div>
+        <div class="button_toggle_completed neutral_button">Hide completed</div>
         <div class="completed_tasks_list">
             <?php if(isset($completed_tasks_list)) :?>
                 <?php foreach ($completed_tasks_list as $task) : ?>
                     <div id="<?php echo htmlspecialchars($task['id']); ?>" class="task">
-                        <div class="undone_button"><img src="img/button_done.png" alt="done" class="button_done"></div>
-                        <div class="task_name_area"><?php echo htmlspecialchars($task['name']); ?></div>
+                        <div class="undone_button"><img src="img/button_done_cross.png" alt="done" class="button_done"></div>
+                        <div class="task_name_area completed_task"><?php echo htmlspecialchars($task['name']); ?></div>
                         <?php if ($task['due_time'] != "0000-00-00") : ?>
                             <div class="task_due_date"><?php echo htmlspecialchars($task['due_time']); ?></div>
                         <?php endif;?>

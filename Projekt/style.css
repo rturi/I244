@@ -9,6 +9,21 @@ body {
     min-width: 500px;
 }
 
+.content_block {
+    border: solid;
+    border-radius: 3px;
+    border-width: thin;
+    border-color: cornflowerblue;
+    margin-top: 1px;
+    margin-left: 7px;
+    margin-right: 7px;
+    background-color: white;
+    font-size: 12pt;
+    padding-top: 20px;
+    padding-left: 7px;
+    padding-bottom: 10px;
+}
+
 .page_container {
     margin: auto;
     height: 100vh;
@@ -45,10 +60,6 @@ div.menu {
     background-color: dimgray;
 }
 
-.menu .menu_intermission {
-    font-size: 14pt;
-}
-
 
 .search_box {
     height: 40px;
@@ -62,6 +73,7 @@ div.content {
 .title_area {
     height: 40px;
     background-color: midnightblue;
+    padding-top: 4px;
 }
 
 .title_area h1 {
@@ -70,6 +82,18 @@ div.content {
     /*margin-top: px;*/
     color: white;
 }
+
+.add_task_form {
+    position: relative;
+    top: 10px;
+    left: 7px;
+    margin-bottom: 18px;
+}
+
+.add_box {
+    height: 20px;
+}
+
 
 div.task {
     border: solid;
@@ -249,12 +273,55 @@ div.edit_task_area {
 
 
 
+.button_toggle_completed{
+    position: relative;
+    width: 100px;
+    left: 16px;
+    margin-top: 10px;
+    margin-bottom: 8px;
 
+}
+
+.message_no_tasks {
+    border: solid;
+    border-radius: 3px;
+    border-width: thin;
+    border-color: cornflowerblue;
+    height: 35px;
+    margin-top: 1px;
+    margin-left: 7px;
+    margin-right: 7px;
+    background-color: white;
+    font-size: 14pt;
+    padding-top: 10px;
+    padding-left: 7px;
+}
 
 .completed_tasks_list .task {
     color: gray;
+}
+
+.completed_task {
     text-decoration: line-through;
 }
+
+.error_message_area {
+    border: solid;
+    border-radius: 3px;
+    border-width: thin;
+    border-color: red;
+    margin-top: 6px;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-bottom: 5px;
+    background-color: lightpink;
+    font-size: 12pt;
+    padding-top: 5px;
+    padding-left: 7px;
+    padding-bottom: 6px;
+
+}
+
 
 .error {
     color: red;

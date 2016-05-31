@@ -1,3 +1,5 @@
+<div class="content_block">
+
 <h1 id="top_h1">Tähtis pealkiri</h1>
 <p>
     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
@@ -7,3 +9,5 @@
     laborum...
     <br>
  </p>
+
+   </div>

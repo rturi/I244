@@ -55,9 +55,11 @@
         </div>
 
         <?php if (isset($_SESSION['errors'])) : ?>
+            <div class="error_message_area">
             <?php foreach($_SESSION['errors'] as $error):?>
                 <div class="error"><?php echo htmlspecialchars($error); ?></div>
             <?php endforeach;?>
+            </div>
             <?php $_SESSION['errors'] = null; ?>
         <?php endif ?>
 
