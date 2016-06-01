@@ -28,7 +28,7 @@ function connect_db() {
 function show_main_page() {
     include_once('view/head.php');
     include('view/main_page.php');
-    include_once('view/foot.html');
+    include_once('view/foot.php');
 }
 
 function get_user_lists($user_id) {
@@ -60,8 +60,8 @@ function show_search()
 {
 
     include_once('view/head.php');
-    include('view/search.html');
-    include_once('view/foot.html');
+    include('view/search.php');
+    include_once('view/foot.php');
 }
 
 
@@ -73,15 +73,19 @@ function show_login()
     if (!empty($_POST)) {
 
         if (empty($_POST['user'])) {
-            $_SESSION['errors']['login_empty_user'] = "Palun sisesta kasutajanimi";
-        } else $input_user = htmlspecialchars($_POST['user']);
+            $_SESSION['errors']['login_empty_user'] = "Please enter your username";
+        } else if (isLegitLoginPassword($_POST['user'])) {
+            $input_user = htmlspecialchars($_POST['user']);
+        }
 
         if (empty($_POST['password'])) {
-            $_SESSION['errors']['login_empty_password'] = "Palun sisesta parool";
-        } else $input_password = htmlspecialchars($_POST['password']);
+            $_SESSION['errors']['login_empty_password'] = "Please enter your password";
+        } else if (isLegitLoginUsername($_POST['password'])){
+            $input_password = htmlspecialchars($_POST['password']);
+        };
 
 
-        if (!isset($_SESSION['errors']['login_empty_password']) && !isset($_SESSION['errors']['login_empty_user'])) {
+        if (!isset($_SESSION['errors'])) {
 
             $sql = "SELECT id, username FROM `rturi_users` WHERE username = '" . mysqli_real_escape_string($connection, $input_user) . "' AND passw = SHA1('" . mysqli_real_escape_string($connection, $input_password) . "')";
 
@@ -94,14 +98,14 @@ function show_login()
                 header('Location: ?mode=main_page');
                 exit(0);
             } else {
-                $_SESSION['errors']['login_wrong_credentials'] = "Sisestatud parool/kasutaja on vale";
+                $_SESSION['errors']['login_wrong_credentials'] = "Entered password and user name don't match";
             }
         }
 
     }
     include_once('view/head.php');
     include('view/login.php');
-    include_once('view/foot.html');
+    include_once('view/foot.php');
 }
 
 function tasks(){
@@ -176,7 +180,7 @@ function show_list() {
 
         include_once('view/head.php');
         include('view/list.php');
-        include_once('view/foot.html');
+        include_once('view/foot.php');
 
     }
 
@@ -517,7 +521,7 @@ function show_register() {
 
     include_once('view/head.php');
     include('view/register.php');
-    include_once('view/foot.html');
+    include_once('view/foot.php');
 }
 
 
@@ -611,6 +615,50 @@ function isLegitRegPassword ($inputPassword) {
         $_SESSION['errors']['register_password_special_chars'] = "Password can only contain numbers and letters";
         return false;
     }
+
+    return true;
+}
+
+
+function isLegitLoginUsername ($inputName) {
+
+    if(!is_string($inputName)) {
+        $_SESSION['errors']['login_username_not_string'] = "Entered password and user name don't match";
+        return false;
+    }
+
+    if(strlen($inputName) < 3) {
+        $_SESSION['errors']['login_username_too_short'] = "Entered password and user name don't match";
+        return false;
+    }
+
+    if(strlen($inputName) > 500) {
+        $_SESSION['errors']['login_username_too_long'] = "Entered password and user name don't match";
+        return false;
+    }
+
+    return true;
+}
+
+
+function isLegitLoginPassword ($inputPassword) {
+
+    if(!is_string($inputPassword)) {
+        $_SESSION['errors']['login_password_not_string'] = "Entered password and user name don't match";
+        return false;
+    }
+
+    if(strlen($inputPassword) < 3) {
+        $_SESSION['errors']['login_password_too_short'] = "Entered password and user name don't match";
+        return false;
+    }
+
+    if(strlen($inputPassword) > 500) {
+        $_SESSION['errors']['login_password_too_long'] = "Entered password and user name don't match";
+        return false;
+    }
+
+    return true;
 
     return true;
 }

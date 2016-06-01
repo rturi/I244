@@ -1,12 +1,17 @@
 <div class="content_block">
 
-<h1 id="top_h1">Tähtis pealkiri</h1>
+<h1 id="top_h1">This is a simple site for managing your todo lists</h1>
 <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-    pariatur. Excepteur sint occaecat <em>cupidatat non proident</em>, sunt in culpa qui officia deserunt mollit anim id est
-    laborum...
+    You can:
+
+    <ul>
+        <li>Add new users</li>
+        <li>Add, rename and delete list</li>
+        <li>Add, edit (rename, change status, set due dates and add an info text) and delete tasks in said lists</li>
+        <li>Search tasks</li>
+
+    </ul>
+    That's about it for the time being. Hope you like it :)
     <br>
  </p>
 

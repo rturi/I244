@@ -24,6 +24,10 @@ body {
     padding-bottom: 10px;
 }
 
+.content_block ul{
+    margin-left: 40px;
+}
+
 .page_container {
     margin: auto;
     height: 100vh;
