@@ -355,7 +355,7 @@ function edit_task() {
 
 function delete_task() {
 
-    if (isset($_GET['task_id']) && isset($_GET['list_id'])) {
+    if (isset($_GET['task_id'])) {
 
         global $connection;
 
@@ -366,12 +366,11 @@ function delete_task() {
         }
         $input_task_id = htmlspecialchars($_GET['task_id']);
 
-        if (!isLegitListId($_GET['list_id'])) {
-            $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
-            header("Location: ?mode=main_page");
-            exit(0);
+        $input_list_id = '';
+        if (isLegitListId($_GET['list_id'])) {
+            $input_list_id = htmlspecialchars($_GET['list_id']);
         }
-        $input_list_id = htmlspecialchars($_GET['list_id']);
+
 
         $sql = "DELETE FROM rturi_tasks WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
 
@@ -382,7 +381,7 @@ function delete_task() {
 
             if ($_GET['source'] == "list") {
 
-                $sql = "SELECT list_id FROM rturi_tasks WHERE id = ". mysqli_real_escape_string($connection, $active_task_id);
+                $sql = "SELECT list_id FROM rturi_tasks WHERE id = ". mysqli_real_escape_string($connection, $input_task_id);
                 $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
                 $row = mysqli_fetch_assoc($result);
 
@@ -422,22 +421,42 @@ function delete_task() {
 
 function toggle_completed() {
 
-    if (isset($_GET['list_id'])) {
+    if (isset($_GET['list_id']) || isset($_GET['q'])) {
 
-        if (!isLegitListId($_GET['list_id'])) {
-            $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
+        $input_list_id = "";
+        if (isset($_GET['list_id']) && isLegitListId($_GET['list_id'])) {
+            $input_list_id = htmlspecialchars($_GET['list_id']);
+        }
+
+        $input_key = '';
+        if (isset($_GET['q']) && isLegitSearchKey($_GET['q'])) {
+            $input_key = htmlspecialchars($_GET['q']);
+        }
+
+        if (!isset($_SESSION['errors'])) {
+
+            if (isset($_SESSION['show_completed_tasks'])) {
+                $_SESSION['show_completed_tasks'] = null;
+            } else $_SESSION['show_completed_tasks'] = true;
+
+            if ($_GET['source'] == "list") {
+                header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+                exit(0);
+            }
+
+            if ($_GET['source'] == "search") {
+                //$_SESSION['errors']['test'] = 'a';
+                header("Location: ?mode=search_task&q=" . htmlspecialchars($input_key));
+                exit(0);
+            }
+
+
+
+        } else {
+            $_SESSION['errors']['error_toggling_completed_tasks'] = "Something went wrong when toggling completed tasks";
             header("Location: ?mode=main_page");
             exit(0);
         }
-        $active_list_id = ($_GET['list_id']); // safe because of list_id validation
-
-        if (isset($_SESSION['show_completed_tasks'])) {
-            $_SESSION['show_completed_tasks'] = null;
-        } else $_SESSION['show_completed_tasks'] = true;
-
-        // no errors: reload original list page with new task
-        header("Location: ?mode=lists&list_id=" . htmlspecialchars($active_list_id));
-        exit(0);
 
     } else {
         $_SESSION['errors']['error_toggling_completed_tasks'] = "Something went wrong when toggling completed tasks";
@@ -449,33 +468,59 @@ function toggle_completed() {
 
 function set_task_active() {
 
-    if (isset($_GET['task_id']) && isset($_GET['list_id'])) {
+    if ((isset($_GET['task_id']) && isset($_GET['list_id']) || isset($_GET['q']))) {
         global $connection;
 
-        if (!isLegitTaskId($_GET['task_id'])) {
+        if (isset($_GET['task_id']) && isLegitTaskId($_GET['task_id'])) {
+            $input_task_id = htmlspecialchars($_GET['task_id']);
+        }
+
+        $input_list_id = "";
+        if (isset($_GET['list_id']) && isLegitListId($_GET['list_id'])) {
+            $input_list_id = htmlspecialchars($_GET['list_id']);
+        }
+
+        $input_key = '';
+        if (isset($_GET['q']) && isLegitSearchKey($_GET['q'])) {
+            $input_key = htmlspecialchars($_GET['q']);
+        }
+
+        if(!isset($_SESSION['errors'])){
+
+            $sql = "UPDATE rturi_tasks SET status = 1, last_change = '" . date('Y-m-d H:i:s') . "' WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+            if (mysqli_affected_rows($connection) > 0) {
+
+                if ($_GET['source'] == "list") {
+                    header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+                    exit(0);
+                }
+
+                if ($_GET['source'] == "search") {
+
+                    if(isset($_GET['q']) && isLegitSearchKey($_GET['q'])){
+                        header("Location: ?mode=search_task&q=" . htmlspecialchars($input_key));
+                        exit(0);
+                    } else {
+                        $_SESSION['errors']['lost_searchkey'] = "Could not find the right place to redirect. Sorry";
+                        header("Location: ?mode=main_page");
+                        exit(0);
+                    }
+                }
+                $_SESSION['errors']['task_set_active_failed'] = "Changin the task status failed, sorry. Please try again.";
+                header("Location: ?mode=main_page");
+                exit(0);
+            } else {
+                $_SESSION['errors']['task_set_active_failed'] = "Changin the task status failed, sorry. Please try again.";
+                header("Location: ?mode=main_page");
+                exit(0);
+            }
+
+
+        } else {
             $_SESSION['errors']['illegal_task_id'] = "The task you tried to delete does not exist or belong to you.";
             header("Location: ?mode=main_page");
-            exit(0);
-        }
-        $input_list_id = htmlspecialchars($_GET['list_id']);
-
-        if (!isLegitListId($_GET['list_id'])) {
-            $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
-            header("Location: ?mode=main_page");
-            exit(0);
-        }
-        $input_task_id = htmlspecialchars($_GET['task_id']);
-
-        $sql = "UPDATE rturi_tasks SET status = 1, last_change = '" . date('Y-m-d H:i:s') . "' WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
-
-        $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-
-        if (mysqli_affected_rows($connection) > 0) {
-            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
-            exit(0);
-        } else {
-            $_SESSION['errors']['task_delete_failed'] = "Changin the task status failed, sorry. Please try again.";
-            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
             exit(0);
         }
 
@@ -483,39 +528,64 @@ function set_task_active() {
 }
 
 
-function set_task_completed() {
+function set_task_completed()
+{
 
-    if (isset($_GET['task_id']) && isset($_GET['list_id'])) {
-
-        if (!isLegitTaskId($_GET['task_id'])) {
-            $_SESSION['errors']['illegal_task_id'] = "The task you tried to delete does not exist or belong to you.";
-            header("Location: ?mode=main_page");
-            exit(0);
-        }
-        $input_list_id = htmlspecialchars($_GET['list_id']);
-
-        if (!isLegitListId($_GET['list_id'])) {
-            $_SESSION['errors']['illegal_list_id'] = "The list you tried to view or change does not exist or belong to you.";
-            header("Location: ?mode=main_page");
-            exit(0);
-        }
-        $input_task_id = htmlspecialchars($_GET['task_id']);
+    if ((isset($_GET['task_id']) && (isset($_GET['list_id'])) || isset($_GET['q']))) {
 
         global $connection;
 
-        $sql = "UPDATE rturi_tasks SET status = 0, last_change = '" . date('Y-m-d H:i:s') . "' WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+        if (isset($_GET['task_id']) && isLegitTaskId($_GET['task_id'])) {
+            $input_task_id = htmlspecialchars($_GET['task_id']);
+        }
 
-        $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+        $input_list_id = "";
+        if (isset($_GET['list_id']) && isLegitListId($_GET['list_id'])) {
+            $input_list_id = htmlspecialchars($_GET['list_id']);
+        }
 
-        if (mysqli_affected_rows($connection) > 0) {
-            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+        $input_key = '';
+        if (isset($_GET['q']) && isLegitSearchKey($_GET['q'])) {
+            $input_key = htmlspecialchars($_GET['q']);
+        }
+
+        if (!isset($_SESSION['errors'])) {
+
+            $sql = "UPDATE rturi_tasks SET status = 0, last_change = '" . date('Y-m-d H:i:s') . "' WHERE id = " . mysqli_real_escape_string($connection, $input_task_id) . " and user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+            if (mysqli_affected_rows($connection) > 0) {
+
+                if ($_GET['source'] == "list") {
+                    header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+                    exit(0);
+                }
+
+                if ($_GET['source'] == "search") {
+                    //$_SESSION['errors']['test'] = 'a';
+                    header("Location: ?mode=search_task&q=" . htmlspecialchars($input_key));
+                    exit(0);
+                }
+            }
+
+            $_SESSION['errors']['task_set_active_failed'] = "Changin the task status failed, sorry. Please try again.";
+            header("Location: ?mode=main_page");
             exit(0);
+
         } else {
-            $_SESSION['errors']['task_delete_failed'] = "Changin the task status failed, sorry. Please try again.";
-            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+            $_SESSION['errors']['task_set_active_failed'] = "Changin the task status failed, sorry. Please try again.";
+            header("Location: ?mode=main_page");
             exit(0);
         }
+
+    } else {
+        $_SESSION['errors']['illegal_task_id'] = "The task you tried to delete does not exist or belong to you.";
+        header("Location: ?mode=main_page");
+        exit(0);
     }
+
+
+
 }
 
 
@@ -525,7 +595,7 @@ function show_search() {
 
     $input_keyword = '';
 
-    if ((isset($_POST['q']) && $_POST['q'] != "") || (isset($_GET['q']) && $_GET['q'] != "")) {
+    if ((isset($_POST['q'])) || (isset($_GET['q']))) {
 
 
         if(isset($_POST['q']) && isLegitSearchKey($_POST['q'])) {
@@ -540,7 +610,7 @@ function show_search() {
 
             global $connection;
 
-            $sql = "SELECT * FROM rturi_tasks WHERE user_id = " . $_SESSION['user_id'] . " and (info LIKE '%" . mysqli_real_escape_string($connection, $input_keyword) . "%' or name LIKE '%" . mysqli_real_escape_string($connection, $input_keyword) . "%') ";
+            $sql = "SELECT * FROM rturi_tasks WHERE user_id = " . $_SESSION['user_id'] . " and (info LIKE '%" . mysqli_real_escape_string($connection, $input_keyword) . "%' or name LIKE '%" . mysqli_real_escape_string($connection, $input_keyword) . "%') and status = 1 ";
 
             $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
@@ -549,6 +619,17 @@ function show_search() {
                     $active_tasks_list[] = $row;
                 }
             }
+
+            $sql = "SELECT id, name, info, due_time, status, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND status = 0";
+
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $completed_tasks_list[$row['id']] = $row;
+                }
+            }
+
         }
 
     } else {

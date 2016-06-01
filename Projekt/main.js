@@ -40,22 +40,19 @@ window.onload = function() {
         var task_id = $(this).closest(".edit_task_area").prev().attr("id");
         var mode = getUrlParameter('mode');
 
-
         if (mode == "lists") {
 
             var list_id = getUrlParameter('list_id');
+            console.log("?mode=delete_task&source=list&task_id=" + task_id + "&list_id=" + list_id);
 
-            console.log("if");
-            window.open("?mode=delete_task&task_id=" + task_id + "&list_id=" + list_id, "_self")
+            window.open("?mode=delete_task&source=list&task_id=" + task_id + "&list_id=" + list_id, "_self")
         }
 
-        if (mode == "search") {
+        if (mode == "search_task") {
 
-            var list_id = getUrlParameter('list_id');
-            //var search_keyword = (document).("span .search_key").text();
-            //
-            //console.log(search_keyword);
-            window.open("?mode=delete_task&task_id=" + task_id + "&list_id=" + list_id, "_self")
+            var search_keyword = $(this).closest(".content").find(".search_key").text();
+
+            window.open("?mode=delete_task&task_id=" + task_id + "&source=search&q=" + search_keyword, "_self")
         }
 
     });
@@ -65,29 +62,69 @@ window.onload = function() {
 
     $("div.button_toggle_completed").click(function () {
 
-        var list_id = getUrlParameter('list_id');
 
-        window.open("?mode=toggle_completed&list_id=" + list_id,"_self")
+        var mode = getUrlParameter('mode');
+
+        if (mode == "lists") {
+
+            var list_id = getUrlParameter('list_id');
+
+            window.open("?mode=toggle_completed&source=list&list_id=" + list_id,"_self");
+        }
+
+        if (mode == "search_task") {
+
+            var search_keyword = $(this).closest(".content").find(".search_key").text();
+
+            window.open("?mode=toggle_completed&source=search&q=" + search_keyword,"_self")
+
+        }
+
+
+
     });
 
 
 
     $("div.done_button").click(function () {
 
-        var list_id = getUrlParameter('list_id');
         var task_id = $(this).parent().attr("id");
-        console.log("?mode=set_task_completed&list_id=" + list_id + "&task_id=" + task_id);
+        var mode = getUrlParameter('mode');
 
-        window.open("?mode=set_task_completed&list_id=" + list_id + "&task_id=" + task_id, "_self");
+        if (mode == "lists") {
+
+            var list_id = getUrlParameter('list_id');
+
+            window.open("?mode=set_task_completed&source=list&list_id=" + list_id + "&task_id=" + task_id, "_self");
+        }
+
+        if (mode == "search_task") {
+
+            var search_keyword = $(this).closest(".content").find(".search_key").text();
+
+            window.open("?mode=set_task_completed&source=search&q=" + search_keyword + "&task_id=" + task_id, "_self");
+        }
+
     });
 
     $("div.undone_button").click(function () {
 
-        var list_id = getUrlParameter('list_id');
         var task_id = $(this).parent().attr("id");
-        console.log(list_id);
+        var mode = getUrlParameter('mode');
 
-        window.open("?mode=set_task_active&list_id=" + list_id + "&task_id=" + task_id, "_self");
+        if (mode == "lists") {
+
+            var list_id = getUrlParameter('list_id');
+
+            window.open("?mode=set_task_active&source=list&list_id=" + list_id + "&task_id=" + task_id, "_self");
+        }
+
+        if (mode == "search_task") {
+
+            var search_keyword = $(this).closest(".content").find(".search_key").text();
+
+            window.open("?mode=set_task_active&source=search&q=" + search_keyword + "&task_id=" + task_id, "_self");
+        }
     });
 
     // sets task name max width to get 'text-overflow: ellipsis;' to work right
