@@ -14,7 +14,9 @@
 
     <div class="menu">
         <?php if (isset($_SESSION['username'])) : ?>
-        <input class="search_box" type="text" placeholder="Search tasks...">
+            <form action="?mode=search_task" method="post">
+                    <input class="search_box" placeholder="Search..." type="text" name="q">
+            </form>
         <?php endif; ?>
 
         <ul>

@@ -31,6 +31,88 @@ function show_main_page() {
     include_once('view/foot.php');
 }
 
+function show_register() {
+
+    global $connection;
+
+    if(!empty($_POST)) {
+
+        if(empty($_POST['user'])) {
+            $_SESSION['errors']['register_empty_user'] = "Please enter an username";
+        } else {
+            if(isLegitRegUsername($_POST['user'])) {
+                $inputUserName = $_POST['user'];
+            }
+        }
+
+
+        if(empty($_POST['password'])) {
+            $_SESSION['errors']['register_empty_password'] = "Please enter a password";
+        } if (isLegitRegPassword($_POST['password'])) {
+            $inputPassword = $_POST['password'];
+        } else {
+            $_SESSION['errors']['register_unlegit_password'] = "Username should be 3 - 500 characters long and can consist only of english alphabet letters and numbers";
+        }
+
+        if(empty($_POST['re_password'])) {
+            $_SESSION['errors']['register_empty_re_password'] = "Please fill the 'repeat password' field";
+        } if (isLegitRegPassword($_POST['password'])) {
+            $inputRePassword = $_POST['re_password'];
+        }
+
+        if(empty($_SESSION['errors']) && $inputPassword != $inputRePassword) {
+            $_SESSION['errors']['register_passwords_do_not_match'] = "Entered passwords don't match";
+        }
+
+        if(empty($_SESSION['errors'])) {
+            $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
+
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+            if (mysqli_num_rows($result) > 0) {
+                $_SESSION['errors']['register_username_taken'] = "That name is already taken, sorry.";
+            }
+        }
+
+        if(empty($_SESSION['errors'])) {
+
+
+            $sql = "INSERT INTO `rturi_users`(username, passw) VALUES ('" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "',SHA1('" . mysqli_real_escape_string($connection, ($inputPassword)) . "'))";
+
+            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+
+
+            if (mysqli_affected_rows($connection) < 1) {
+                $_SESSION['errors']['register_db_insert_failed'] = "Creating your new user failed. Sorry. Please try again.";
+                header("Location: ?mode=register");
+                exit(0);
+            } else { // generate first list for new user
+
+                // get the user_id of the new user
+                $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+                // ToDo: there should be a try-catch here
+                $row = mysqli_fetch_assoc($result);
+
+                $new_user_id = $row['id'];
+
+                $sql = "INSERT INTO rturi_lists (name, user_id) VALUES ('My tasks', " . mysqli_real_escape_string($connection, $new_user_id) . "), ('Shopping', " . mysqli_real_escape_string($connection, $new_user_id) . ")";
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+            }
+
+
+            $_SESSION['messages']['register_success'] = "Congratulations, you have successfully created your new account! Log in and start todoing.";
+            header("Location: ?mode=main_page");
+            exit(0);
+        }
+
+    }
+
+    include_once('view/head.php');
+    include('view/register.php');
+    include_once('view/foot.php');
+}
+
 function get_user_lists($user_id) {
 
     if (!is_numeric($user_id) || $user_id < 0 || $user_id > 10000000000) {
@@ -56,17 +138,8 @@ function get_user_lists($user_id) {
     return $answer;
 }
 
-function show_search()
-{
 
-    include_once('view/head.php');
-    include('view/search.php');
-    include_once('view/foot.php');
-}
-
-
-function show_login()
-{
+function show_login() {
 
     global $connection;
 
@@ -107,40 +180,6 @@ function show_login()
     include('view/login.php');
     include_once('view/foot.php');
 }
-
-function tasks(){
-
-    if (isset($_GET['list_id'])) {
-
-        isLegitListId($_GET['list_id']);
-        $active_list_id = ($_GET['list_id']); // safe because of list_id validation
-
-        global $connection;
-
-        // old search query stuff
-//        $searchKey = mysqli_real_escape_string($connection, $_GET['q']);
-//        $sql = "SELECT * FROM rturi_tasks WHERE user_id = " . $_SESSION['user_id'] . " and (info LIKE '%" . $searchKey . "%' or name LIKE '%" . $searchKey . "%') ";
-
-        $sql = "SELECT id, name, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
-
-        $answer = array();
-
-        $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-
-        if (mysqli_num_rows($result) > 0) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                $answer[] = $row;
-            }
-        }
-        echo json_encode($answer);
-
-    } else {
-        // Todo: json fail answer;
-    }
-
-
-}
-
 
 function show_list() {
 
@@ -278,15 +317,29 @@ function edit_task() {
 
             }
 
+
             if ($_GET['source'] == "list") {
 
                 $sql = "SELECT list_id FROM rturi_tasks WHERE id = ". mysqli_real_escape_string($connection, $active_task_id);
                 $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
                 $row = mysqli_fetch_assoc($result);
 
-                header("Location: ?mode=lists&list_id=4");
+                header("Location: ?mode=lists&list_id=" .  $row['list_id']);
                 exit(0);
 
+            }
+
+
+            if ($_GET['source'] == "search") {
+
+                if(isset($_GET['q']) && isLegitSearchKey($_GET['q'])){
+                    header("Location: ?mode=search_task&q=" . htmlspecialchars($_GET['q']));
+                    exit(0);
+                } else {
+                    $_SESSION['errors']['lost_searchkey'] = "Could not find the right place to redirect. Sorry";
+                    header("Location: ?mode=main_page");
+                    exit(0);
+                }
             }
 
         } else {
@@ -325,8 +378,32 @@ function delete_task() {
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
         if (mysqli_affected_rows($connection) > 0) {
-            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
-            exit(0);
+
+
+            if ($_GET['source'] == "list") {
+
+                $sql = "SELECT list_id FROM rturi_tasks WHERE id = ". mysqli_real_escape_string($connection, $active_task_id);
+                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+                $row = mysqli_fetch_assoc($result);
+
+                header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+                exit(0);
+
+            }
+
+
+            if ($_GET['source'] == "search") {
+
+                if(isset($_GET['q']) && isLegitSearchKey($_GET['q'])){
+                    header("Location: ?mode=search_task&q=" . htmlspecialchars($_GET['q']));
+                    exit(0);
+                } else {
+                    $_SESSION['errors']['lost_searchkey'] = "Could not find the right place to redirect. Sorry";
+                    header("Location: ?mode=main_page");
+                    exit(0);
+                }
+            }
+
         } else {
             $_SESSION['errors']['task_delete_failed'] = "Deleting the task failed, sorry. Please try again.";
             header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
@@ -442,87 +519,49 @@ function set_task_completed() {
 }
 
 
-function show_register() {
+function show_search() {
 
-    global $connection;
+    $active_tasks_list = array();
 
-    if(!empty($_POST)) {
+    $input_keyword = '';
 
-        if(empty($_POST['user'])) {
-            $_SESSION['errors']['register_empty_user'] = "Please enter an username";
-        } else {
-            if(isLegitRegUsername($_POST['user'])) {
-                $inputUserName = $_POST['user'];
-            }
+    if ((isset($_POST['q']) && $_POST['q'] != "") || (isset($_GET['q']) && $_GET['q'] != "")) {
+
+
+        if(isset($_POST['q']) && isLegitSearchKey($_POST['q'])) {
+            $input_keyword = $_POST['q'];
         }
 
+        if(isset($_GET['q']) && isLegitSearchKey($_GET['q'])) {
+            $input_keyword = $_GET['q'];
+    }
 
-        if(empty($_POST['password'])) {
-            $_SESSION['errors']['register_empty_password'] = "Please enter a password";
-        } if (isLegitRegPassword($_POST['password'])) {
-            $inputPassword = $_POST['password'];
-        } else {
-            $_SESSION['errors']['register_unlegit_password'] = "Username should be 3 - 500 characters long and can consist only of english alphabet letters and numbers";
-        }
+        if(!isset($_SESSION['errors'])) {
 
-        if(empty($_POST['re_password'])) {
-            $_SESSION['errors']['register_empty_re_password'] = "Please fill the 'repeat password' field";
-        } if (isLegitRegPassword($_POST['password'])) {
-            $inputRePassword = $_POST['re_password'];
-        }
+            global $connection;
 
-        if(empty($_SESSION['errors']) && $inputPassword != $inputRePassword) {
-            $_SESSION['errors']['register_passwords_do_not_match'] = "Entered passwords don't match";
-        }
-
-        if(empty($_SESSION['errors'])) {
-            $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
+            $sql = "SELECT * FROM rturi_tasks WHERE user_id = " . $_SESSION['user_id'] . " and (info LIKE '%" . mysqli_real_escape_string($connection, $input_keyword) . "%' or name LIKE '%" . mysqli_real_escape_string($connection, $input_keyword) . "%') ";
 
             $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
             if (mysqli_num_rows($result) > 0) {
-                $_SESSION['errors']['register_username_taken'] = "That name is already taken, sorry.";
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $active_tasks_list[] = $row;
+                }
             }
         }
 
-        if(empty($_SESSION['errors'])) {
-
-
-            $sql = "INSERT INTO `rturi_users`(username, passw) VALUES ('" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "',SHA1('" . mysqli_real_escape_string($connection, ($inputPassword)) . "'))";
-
-            $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-
-
-            if (mysqli_affected_rows($connection) < 1) {
-                $_SESSION['errors']['register_db_insert_failed'] = "Creating your new user failed. Sorry. Please try again.";
-                header("Location: ?mode=register");
-                exit(0);
-            } else { // generate first list for new user
-
-                // get the user_id of the new user
-                $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
-                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-                // ToDo: there should be a try-catch here
-                $row = mysqli_fetch_assoc($result);
-
-                $new_user_id = $row['id'];
-
-                $sql = "INSERT INTO rturi_lists (name, user_id) VALUES ('My tasks', " . mysqli_real_escape_string($connection, $new_user_id) . "), ('Shopping', " . mysqli_real_escape_string($connection, $new_user_id) . ")";
-                $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-            }
-
-
-            $_SESSION['messages']['register_success'] = "Congratulations, you have successfully created your new account! Log in and start todoing.";
-            header("Location: ?mode=main_page");
-            exit(0);
-        }
+    } else {
 
     }
 
+
     include_once('view/head.php');
-    include('view/register.php');
+    include('view/search.php');
     include_once('view/foot.php');
 }
+
+
 
 
 function isLegitListId($inputID) {
@@ -691,6 +730,22 @@ function isLegitTaskInfo ($inputInfo) {
     if (strlen($inputInfo) > 5000) {
         $_SESSION['errors']['edit_task_info_too_long'] = "Additional info can be upto 5000 characters long";
     }
+
+    return true;
+}
+
+function isLegitSearchKey($input_key) {
+
+    if(!is_string($input_key)) {
+        $_SESSION['errors']['searchkey_not_string'] = "Search keyword not OK";
+        return false;
+    }
+
+    if(strlen($input_key) > 100) {
+        $_SESSION['errors']['searchkey_too_long'] = "Search keyword can't be longer than 100 characters";
+        return false;
+    }
+
 
     return true;
 }

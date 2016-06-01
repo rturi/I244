@@ -11,6 +11,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if (isset($_GET['mode'])) {
+
     $mode = $_GET['mode'];
     switch ($mode) {
         case 'main_page':
@@ -32,12 +33,12 @@ if (isset($_GET['mode'])) {
         case 'register':
             show_register();
             break;
-        case 'logout';
+        case 'logout':
             if (isset($_SESSION['username'])) {
                 end_session();
             } else show_main_page();
             break;
-        case 'search';
+        case 'search_task':
             if (isset($_SESSION['username'])) {
                 show_search();
             } else show_login();

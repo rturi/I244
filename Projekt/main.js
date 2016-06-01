@@ -25,21 +25,6 @@ window.onload = function() {
     });
 
 
-
-    //$("div.save_task_button").click(function () {
-    //
-    //    var task_id = $(this).closest(".edit_task_area").prev().attr("id");
-    //    var mode = getUrlParameter('mode');
-    //
-    //    console.log("test");
-    //
-    //    if (mode == "lists") {
-    //
-    //        var list_id = getUrlParameter('list_id');
-    //        window.open("?mode=edit_task&list_id=" + list_id + "&task_id=" + task_id,"_self")
-    //    }
-    //});
-
     $("div.delete_task_button_area").on("click", "div.delete_task_button", function(){
         $(this).parent().html("<div class=\"delete_task_confirm_button pos_button\">Delete</div><div class=\"delete_task_cancel_button neg_button\">Cancel</div>");
     });
@@ -61,6 +46,15 @@ window.onload = function() {
             var list_id = getUrlParameter('list_id');
 
             console.log("if");
+            window.open("?mode=delete_task&task_id=" + task_id + "&list_id=" + list_id, "_self")
+        }
+
+        if (mode == "search") {
+
+            var list_id = getUrlParameter('list_id');
+            //var search_keyword = (document).("span .search_key").text();
+            //
+            //console.log(search_keyword);
             window.open("?mode=delete_task&task_id=" + task_id + "&list_id=" + list_id, "_self")
         }
 
