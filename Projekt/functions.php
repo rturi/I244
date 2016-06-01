@@ -2,9 +2,12 @@
 
 function start_session() {
     session_start();
+
+    $_SESSION['token'] = sha1(session_id() . "kala");
 }
 
-function end_session() { //lopeta_sessioon() in the example
+// Session and DB connection code taken from course materials
+function end_session() {
     $_SESSION = array();
     if (isset($_COOKIE[session_name()])) {
         setcookie(session_name(), '', time() - 42000, '/');
@@ -35,7 +38,11 @@ function show_register() {
 
     global $connection;
 
+    $page_title = "Register";
+
     if(!empty($_POST)) {
+
+        isLegitToken($_POST['token']);
 
         if(empty($_POST['user'])) {
             $_SESSION['errors']['register_empty_user'] = "Please enter an username";
@@ -76,11 +83,9 @@ function show_register() {
 
         if(empty($_SESSION['errors'])) {
 
-
             $sql = "INSERT INTO `rturi_users`(username, passw) VALUES ('" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "',SHA1('" . mysqli_real_escape_string($connection, ($inputPassword)) . "'))";
 
             $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-
 
             if (mysqli_affected_rows($connection) < 1) {
                 $_SESSION['errors']['register_db_insert_failed'] = "Creating your new user failed. Sorry. Please try again.";
@@ -91,12 +96,11 @@ function show_register() {
                 // get the user_id of the new user
                 $sql = "SELECT id FROM rturi_users WHERE username = '" . mysqli_real_escape_string($connection, htmlspecialchars($inputUserName)) . "'";
                 $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
-                // ToDo: there should be a try-catch here
                 $row = mysqli_fetch_assoc($result);
 
                 $new_user_id = $row['id'];
 
-                $sql = "INSERT INTO rturi_lists (name, user_id) VALUES ('My tasks', " . mysqli_real_escape_string($connection, $new_user_id) . "), ('Shopping', " . mysqli_real_escape_string($connection, $new_user_id) . ")";
+                $sql = "INSERT INTO rturi_lists (name, user_id) VALUES ('Personal', " . mysqli_real_escape_string($connection, $new_user_id) . "), ('Work', " . mysqli_real_escape_string($connection, $new_user_id) . "), ('Shopping', " . mysqli_real_escape_string($connection, $new_user_id) . ")";
                 $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
             }
 
@@ -113,10 +117,10 @@ function show_register() {
     include_once('view/foot.php');
 }
 
+
 function get_user_lists($user_id) {
 
     if (!is_numeric($user_id) || $user_id < 0 || $user_id > 10000000000) {
-        //ToDo: improve user_id check
         $_SESSION['errors']['illegal_list_id'] = "Could not find requested list";
         header("Location: ?mode=main_page");
         exit(0);
@@ -141,9 +145,13 @@ function get_user_lists($user_id) {
 
 function show_login() {
 
+    $page_title = "Log in";
+
     global $connection;
 
     if (!empty($_POST)) {
+
+        isLegitToken($_POST['token']);
 
         if (empty($_POST['user'])) {
             $_SESSION['errors']['login_empty_user'] = "Please enter your username";
@@ -181,6 +189,7 @@ function show_login() {
     include_once('view/foot.php');
 }
 
+
 function show_list() {
 
     if (isset($_GET['list_id'])) {
@@ -195,7 +204,7 @@ function show_list() {
 
         global $connection;
 
-        $sql = "SELECT id, name, info, due_time, status, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND list_id = " . mysqli_real_escape_string($connection, $active_list_id . " AND status = 1");
+        $sql = "SELECT id, name, info, due_time, status, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND list_id = " . mysqli_real_escape_string($connection, $active_list_id . " AND status = 1" . getListOrderQueryPart());
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
@@ -205,9 +214,7 @@ function show_list() {
             }
         }
 
-
-
-        $sql = "SELECT id, name, info, due_time, status, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND list_id = " . mysqli_real_escape_string($connection, $active_list_id . " AND status = 0");
+        $sql = "SELECT id, name, info, due_time, status, list_id FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']) . " AND list_id = " . mysqli_real_escape_string($connection, $active_list_id . " AND status = 0" . getListOrderQueryPart());
 
         $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
@@ -225,8 +232,13 @@ function show_list() {
 
 }
 
-function add_task()
-{
+function add_task() {
+
+    if (getUserTaskCount() > 100000) {
+        $_SESSION['errors']['task_limit_reached'] = "You have entered 100'000 tasks. To enter more tasks delete some older ones";
+        header("Location: ?mode=main_page");
+        exit(0);
+    }
 
     if (isset($_GET['list_id'])) {
 
@@ -240,6 +252,8 @@ function add_task()
         global $connection;
 
         if (!empty($_POST['name'])) {
+
+            isLegitToken($_POST['token']);
 
             if (isLegitTaskName($_POST['name'])) {
 
@@ -275,7 +289,6 @@ function add_task()
 
 function edit_task() {
 
-
     if (isset($_GET['task_id'])) {
 
         $active_task_id = $_GET['task_id'];
@@ -283,6 +296,8 @@ function edit_task() {
         if(isLegitTaskId($active_task_id)) {
 
             if(!empty($_POST)) {
+
+                isLegitToken($_POST['token']);
 
                 global $connection;
                 $input_info = '';
@@ -314,9 +329,7 @@ function edit_task() {
                     mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
 
                 }
-
             }
-
 
             if ($_GET['source'] == "list") {
 
@@ -326,9 +339,7 @@ function edit_task() {
 
                 header("Location: ?mode=lists&list_id=" .  $row['list_id']);
                 exit(0);
-
             }
-
 
             if ($_GET['source'] == "search") {
 
@@ -347,8 +358,6 @@ function edit_task() {
             header("Location: ?mode=main_page");
             exit(0);
         }
-
-
     }
 
 }
@@ -450,8 +459,6 @@ function toggle_completed() {
                 exit(0);
             }
 
-
-
         } else {
             $_SESSION['errors']['error_toggling_completed_tasks'] = "Something went wrong when toggling completed tasks";
             header("Location: ?mode=main_page");
@@ -519,17 +526,20 @@ function set_task_active() {
 
 
         } else {
-            $_SESSION['errors']['illegal_task_id'] = "The task you tried to delete does not exist or belong to you.";
+            $_SESSION['errors']['illegal_task_id'] = "The task you tried to change does not exist or belong to you.";
             header("Location: ?mode=main_page");
             exit(0);
         }
 
+    } else {
+        $_SESSION['errors']['illegal_task_id'] = "The task you tried to change does not exist or belong to you.";
+        header("Location: ?mode=main_page");
+        exit(0);
     }
 }
 
 
-function set_task_completed()
-{
+function set_task_completed() {
 
     if ((isset($_GET['task_id']) && (isset($_GET['list_id'])) || isset($_GET['q']))) {
 
@@ -593,12 +603,15 @@ function show_search() {
 
     $active_tasks_list = array();
 
+    $page_title = "Search";
+
     $input_keyword = '';
 
     if ((isset($_POST['q'])) || (isset($_GET['q']))) {
 
 
         if(isset($_POST['q']) && isLegitSearchKey($_POST['q'])) {
+            isLegitToken($_POST['token']);
             $input_keyword = $_POST['q'];
         }
 
@@ -633,9 +646,9 @@ function show_search() {
         }
 
     } else {
+        $_SESSION['errors']['search_redirect_fail'] = "Illegal search parameters";
 
     }
-
 
     include_once('view/head.php');
     include('view/search.php');
@@ -831,5 +844,118 @@ function isLegitSearchKey($input_key) {
     return true;
 }
 
+
+function getListOrderLabel() {
+
+    $setting = "";
+
+    if(isset($_SESSION['list_order'])) {
+        $setting = $_SESSION['list_order'];
+    } else {
+        $setting = "due time";
+    }
+
+    switch ($setting) {
+        case 'change time':
+            return "Sorted by change time";
+            break;
+        case 'alphabet';
+            return "Sorted alphabetically";
+            break;
+        default:
+            return "Sorted by due time";
+    }
+}
+
+function getListOrderQueryPart() {
+
+    $setting = "";
+
+    if(isset($_SESSION['list_order'])) {
+        $setting = $_SESSION['list_order'];
+    } else {
+        $setting = "due time";
+    }
+
+    switch ($setting) {
+        case 'change time':
+            return " ORDER BY last_change DESC";
+            break;
+        case 'alphabet';
+            return " ORDER BY name ASC";
+            break;
+        default:
+            return " ORDER BY due_time ASC";
+    }
+}
+
+function toggle_list_order() {
+
+    if (isset($_GET['list_id'])) {
+
+        $input_list_id = "";
+        if (isLegitListId($_GET['list_id'])) {
+            $input_list_id = htmlspecialchars($_GET['list_id']);
+        }
+
+        if (!isset($_SESSION['errors'])) {
+
+            $setting = "";
+            if(isset($_SESSION['list_order'])) {
+                $setting = $_SESSION['list_order'];
+            } else {
+                $setting = "due time";
+            }
+
+
+            switch ($setting) {
+                case 'due time':
+                    $_SESSION['list_order'] = 'alphabet';
+                    break;
+                case 'alphabet';
+                    $_SESSION['list_order'] = "change time";
+                    break;
+                default:
+                    $_SESSION['list_order'] = 'due time';
+            }
+
+            header("Location: ?mode=lists&list_id=" . htmlspecialchars($input_list_id));
+            exit(0);
+
+        } else {
+            $_SESSION['errors']['error_toggling_completed_tasks'] = "Something went wrong when toggling list order tasks";
+            header("Location: ?mode=main_page");
+            exit(0);
+        }
+
+    } else {
+        $_SESSION['errors']['error_toggling_completed_tasks'] = "Something went wrong when toggling list order";
+        header("Location: ?mode=main_page");
+        exit(0);
+    }
+
+
+}
+
+function isLegitToken ($inputToken) {
+    if ($inputToken != $_SESSION['token']) {
+        $_SESSION['errors']['wrong_token'] = "Session token has expired";
+        header("Location: ?mode=main_page");
+        exit(0);
+    }
+}
+
+function getUserTaskCount() {
+
+    global $connection;
+
+    $sql = "SELECT count(id) AS count FROM rturi_tasks WHERE user_id = " . mysqli_real_escape_string($connection, $_SESSION['user_id']);
+    $result = mysqli_query($connection, $sql) or die("$sql - " . mysqli_error($connection));
+    $row = mysqli_fetch_assoc($result);
+
+    $answer = $row['count'];
+
+    return $answer;
+}
 
 ?>

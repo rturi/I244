@@ -7,7 +7,7 @@ start_session();
 connect_db();
 
 if (isset($_SESSION['user_id'])) {
-    $_SESSION['lists'] = get_user_lists($_SESSION['user_id']); //ToDo: find a more appropriate location
+    $_SESSION['lists'] = get_user_lists($_SESSION['user_id']);
 }
 
 if (isset($_GET['mode'])) {
@@ -71,6 +71,11 @@ if (isset($_GET['mode'])) {
         case 'set_task_active':
             if (isset($_SESSION['username'])) {
                 set_task_active();
+            } else show_login();
+            break;
+        case 'toggle_list_order':
+            if (isset($_SESSION['username'])) {
+                toggle_list_order();
             } else show_login();
             break;
         default:

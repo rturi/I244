@@ -43,8 +43,6 @@ window.onload = function() {
         if (mode == "lists") {
 
             var list_id = getUrlParameter('list_id');
-            console.log("?mode=delete_task&source=list&task_id=" + task_id + "&list_id=" + list_id);
-
             window.open("?mode=delete_task&source=list&task_id=" + task_id + "&list_id=" + list_id, "_self")
         }
 
@@ -80,10 +78,14 @@ window.onload = function() {
 
         }
 
-
-
     });
 
+
+    $("div.list_order_button").click(function () {
+
+        var list_id = getUrlParameter('list_id');
+        window.open("?mode=toggle_list_order&list_id=" + list_id,"_self");
+    });
 
 
     $("div.done_button").click(function () {
@@ -131,29 +133,6 @@ window.onload = function() {
     $(".task_name_area").css("width", window.innerWidth - 355);
 
 
-    $(".search_box").keyup(function () {
-
-        // ToDo: set upper limit to search key length;
-
-
-        //https://developer.mozilla.org/en-US/docs/Web/API/History_API
-        var stateObj = { foo: "bar" };
-        history.pushState(stateObj, "", "?mode=search&key=" + $(".search_box").val());
-
-        //http://www.w3schools.com/jquery/jquery_ajax_get_post.asp
-        $.get("?mode=search&q=" + $(".search_box").val(), function(data, status){
-
-            $.each($.parseJSON(data), function(idx, obj) {
-
-                $(".content").append("<li>" + obj.name);
-            });
-
-        });
-
-    });
-
-
-
 }
 
 
@@ -162,7 +141,6 @@ window.onload = function() {
 window.onresize = function() {
     if (window.innerWidth > 500) {
         $(".task_name_area").css("width", window.innerWidth - 355);
-        console.log("resize");
     }
 }
 
@@ -181,21 +159,3 @@ var getUrlParameter = function getUrlParameter(sParam) {
         }
     }
 };
-
-
-
-//function loadCompletedTasks () {
-//    $("div.completed_tasks_list").html("test2e");
-//
-//    $.get("?mode=tasks&list_id=4", function(data, status){
-//
-//        alert("Data: " + data + "\nStatus: " + status);
-//
-//        $.each($.parseJSON(data), function(idx, obj) {
-//
-//            $(".content").append("<li>" + obj.name);
-//        });
-//
-//    });
-//
-//}

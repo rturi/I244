@@ -13,6 +13,7 @@
                 </div>
                 <div class="edit_task_area" style="display: none;">
                     <form action="?mode=edit_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&source=search&q=<?php echo htmlspecialchars($input_keyword)?>" method="post">
+                        <input type="hidden" name="token" value="<?php echo htmlspecialchars($_SESSION['token']); ?>">
                         <table>
                             <tr>
                                 <td>Name:</td>
@@ -20,7 +21,7 @@
                             </tr>
                             <tr>
                                 <td>Due:</td>
-                                <td><input type="date" name="due_time" value="<?php if(!empty($task['due_time'])) echo htmlspecialchars($task['due_time']); ?>"></td>
+                                <td><input type="date" name="due_time" value="<?php if($task['due_time'] != "0000-00-00") echo htmlspecialchars($task['due_time']); ?>"></td>
                             </tr>
                             <tr>
                                 <td>Info:</td>
@@ -36,7 +37,7 @@
         </div>
     <?php else : ?>
 
-        <div class="message_no_tasks">Found 0 tasks</div>
+        <div class="message_no_tasks">Found 0 active tasks</div>
 
     <?php endif;?>
 </div>
@@ -59,6 +60,7 @@
             </div>
             <div class="edit_task_area" style="display: none;">
                 <form action="?mode=edit_task&task_id=<?php echo htmlspecialchars($task['id']); ?>&source=list" method="post">
+                    <input type="hidden" name="token" value="<?php echo htmlspecialchars($_SESSION['token']); ?>">
                     <table>
                         <tr>
                             <td>Name:</td>
@@ -66,7 +68,7 @@
                         </tr>
                         <tr>
                             <td>Due:</td>
-                            <td><input type="date" name="due_time" value="<?php echo htmlspecialchars($task['due_time']); ?>"></td>
+                            <td><input type="date" name="due_time" value="<?php if($task['due_time'] != "0000-00-00") echo htmlspecialchars($task['due_time']); ?>"></td>
                         </tr>
                         <tr>
                             <td>Info:</td>
@@ -82,7 +84,7 @@
     </div>
 <?php else : ?>
 
-    <div class="message_no_tasks">There are no completed tasks in this list</div>
+    <div class="message_no_tasks">Found 0 completed tasks</div>
 
 <?php endif;?>
 </div>

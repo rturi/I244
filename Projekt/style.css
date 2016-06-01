@@ -24,7 +24,7 @@ body {
     padding-bottom: 10px;
 }
 
-.content_block ul{
+.content_block ul {
     margin-left: 40px;
 }
 
@@ -32,7 +32,7 @@ body {
     margin: auto;
     height: 100vh;
     background-color: blue;
-    background-image: url("img/blue.jpg");
+    background-image: url("img/blue2.jpg");
     background-size:cover
 }
 
@@ -64,6 +64,14 @@ div.menu {
     background-color: dimgray;
 }
 
+.menu_intermission {
+    height: 30px;
+    width: 100%;
+    font-size: 20pt;
+    background-color: darkslategray;
+    color: white;
+    padding-left: 0px;
+}
 
 .search_box {
     height: 40px;
@@ -98,6 +106,24 @@ div.content {
     height: 20px;
 }
 
+.list_add_task_area {
+    position: relative;
+    float: left;
+
+}
+
+.list_order_button {
+    position: relative;
+    margin-top: 12px;
+    float: right;
+}
+
+.list_toolbar {
+    height: 50px;
+    margin-top: 1px;
+    margin-left: 7px;
+    margin-right: 7px;
+}
 
 div.task {
     border: solid;
@@ -204,6 +230,7 @@ div.edit_task_area {
     font-size: 13px;
     padding: 6px 12px 6px 12px;
     text-decoration: none;
+    cursor: default;
 }
 
 /* generated with http://css3buttongenerator.com/ */
@@ -215,6 +242,7 @@ div.edit_task_area {
     background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
     background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
     text-decoration: none;
+    cursor: default;
 }
 
 
@@ -233,6 +261,7 @@ div.edit_task_area {
     font-size: 13px;
     padding: 6px 12px 6px 12px;
     text-decoration: none;
+    cursor: default;
 }
 
 /* generated with http://css3buttongenerator.com/ */
@@ -244,6 +273,7 @@ div.edit_task_area {
     background-image: -o-linear-gradient(top, #f75454, #ff5757);
     background-image: linear-gradient(to bottom, #f75454, #ff5757);
     text-decoration: none;
+    cursor: default;
 }
 
 
@@ -262,6 +292,7 @@ div.edit_task_area {
     font-size: 13px;
     padding: 6px 12px 6px 12px;
     text-decoration: none;
+    cursor: default;
 }
 
 /* generated with http://css3buttongenerator.com/ */
@@ -273,6 +304,7 @@ div.edit_task_area {
     background-image: -o-linear-gradient(top, #30bd26, #47ab2b);
     background-image: linear-gradient(to bottom, #30bd26, #47ab2b);
     text-decoration: none;
+    cursor: default;
 }
 
 
@@ -326,6 +358,22 @@ div.edit_task_area {
 
 }
 
+.message_area{
+    border: solid;
+    border-radius: 3px;
+    border-width: thin;
+    border-color: blue;
+    margin-top: 6px;
+    margin-left: 7px;
+    margin-right: 7px;
+    margin-bottom: 5px;
+    background-color: lightskyblue;
+    font-size: 12pt;
+    padding-top: 5px;
+    padding-left: 7px;
+    padding-bottom: 6px;
+
+}
 
 .error {
     color: red;

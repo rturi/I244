@@ -6,6 +6,7 @@
     <link type="text/css" rel="stylesheet" href="./style.css">
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.2.min.js"></script>
     <script src="./main.js" type="text/javascript"></script>
+<!-- background photo taken from https://www.flickr.com/photos/pixsells/1637946080/ - Attribution-ShareAlike 2.0 Generic - https://creativecommons.org/licenses/by-sa/2.0/-->
 </head>
 
 <body>
@@ -15,7 +16,8 @@
     <div class="menu">
         <?php if (isset($_SESSION['username'])) : ?>
             <form action="?mode=search_task" method="post">
-                    <input class="search_box" placeholder="Search..." type="text" name="q">
+                <input class="search_box" placeholder="Search..." type="text" name="q">
+                <input type="hidden" name="token" value="<?php echo htmlspecialchars($_SESSION['token']); ?>">
             </form>
         <?php endif; ?>
 
@@ -37,7 +39,7 @@
                 <a href="?mode=logout">Log out</a>
             </li>
         </ul>
-        <span class="menu_intermission">Your lists</span>
+        <div class="menu_intermission">Your lists</div>
         <ul>
             <?php foreach($_SESSION['lists'] as $list) : ?>
             <li>
@@ -53,7 +55,7 @@
     <div class="content">
 
         <div class="title_area">
-            <?php if(isset($page_title)) echo "<h1>" . $page_title . "</h1>"; ?>
+            <?php if(isset($page_title)) echo "<h1>" . htmlspecialchars($page_title) . "</h1>"; ?>
         </div>
 
         <?php if (isset($_SESSION['errors'])) : ?>
@@ -66,9 +68,11 @@
         <?php endif ?>
 
         <?php if (isset($_SESSION['messages'])) : ?>
+            <div class="message_area">
             <?php foreach($_SESSION['messages'] as $message):?>
                 <div class="message"><?php echo htmlspecialchars($message); ?></div>
             <?php endforeach;?>
             <?php $_SESSION['messages'] = null; ?>
+            </div>
         <?php endif ?>
 
