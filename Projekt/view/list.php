@@ -30,7 +30,7 @@
                             <table>
                                 <tr>
                                     <td>Name:</td>
-                                    <td><input type="text" name="name" width="75" value="<?php echo htmlspecialchars($task['name']); ?>"></td>
+                                    <td><input type="text" name="name" value="<?php echo htmlspecialchars($task['name']); ?>"></td>
                                 </tr>
                                 <tr>
                                     <td>Due:</td>
@@ -77,7 +77,7 @@
                             <table>
                                 <tr>
                                     <td>Name:</td>
-                                    <td><input type="text" name="name" width="75" value="<?php echo htmlspecialchars($task['name']); ?>"></td>
+                                    <td><input type="text" name="name" value="<?php echo htmlspecialchars($task['name']); ?>"></td>
                                 </tr>
                                 <tr>
                                     <td>Due:</td>

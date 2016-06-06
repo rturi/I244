@@ -132,7 +132,6 @@ window.onload = function() {
     // sets task name max width to get 'text-overflow: ellipsis;' to work right
     $(".task_name_area").css("width", window.innerWidth - 355);
 
-
 }
 
 
@@ -140,7 +139,10 @@ window.onload = function() {
 // idea from: http://stackoverflow.com/questions/9828831/jquery-on-window-resize
 window.onresize = function() {
     if (window.innerWidth > 500) {
+
         $(".task_name_area").css("width", window.innerWidth - 355);
+
+
     }
 }
 
