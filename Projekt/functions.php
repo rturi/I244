@@ -739,16 +739,6 @@ function isLegitRegPassword ($inputPassword) {
         return false;
     }
 
-    if ($inputPassword != htmlspecialchars($inputPassword)) {
-        $_SESSION['errors']['register_password_special_chars'] = "Password can only contain numbers and letters";
-        return false;
-    }
-
-    if ($inputPassword != htmlspecialchars($inputPassword)) {
-        $_SESSION['errors']['register_password_special_chars'] = "Password can only contain numbers and letters";
-        return false;
-    }
-
     return true;
 }
 
