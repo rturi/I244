@@ -34,7 +34,7 @@
                                 </tr>
                                 <tr>
                                     <td>Due:</td>
-                                    <td><input type="date" name="due_time" value="<?php if($task['due_time'] != "0000-00-00") echo htmlspecialchars($task['due_time']); ?>"></td>
+                                    <td><input type="text" class="dateBox" id="date" placeholder="yyyy-mm-dd" onfocus="(this.type='date')" name="due_time" value="<?php if($task['due_time'] != "0000-00-00") echo htmlspecialchars($task['due_time']); ?>"></td>
                                 </tr>
                                 <tr>
                                     <td>Info:</td>
@@ -81,7 +81,9 @@
                                 </tr>
                                 <tr>
                                     <td>Due:</td>
-                                    <td><input type="date" name="due_time" value="<?php if($task['due_time'] != "0000-00-00") echo htmlspecialchars($task['due_time']); ?>"></td>
+                                    </html>
+                                    <!-- date placeholder solution from http://stackoverflow.com/questions/20321202/not-showing-placeholder-for-input-type-date-field-ios-phonegap-app -->
+                                    <td><input type="text" class="dateBox" id="date" placeholder="yyyy-mm-dd" onfocus="(this.type='date')" name="due_time"  value="<?php if($task['due_time'] != "0000-00-00") echo htmlspecialchars($task['due_time']); ?>"></td>
                                 </tr>
                                 <tr>
                                     <td>Info:</td>
