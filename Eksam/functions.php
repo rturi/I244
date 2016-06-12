@@ -22,6 +22,8 @@ function show_comments() {
         $jsonComment = json_encode($comment_data);
 
         //http://www.w3schools.com/php/func_filesystem_fwrite.asp
+        //ll
+
         //http://stackoverflow.com/questions/7895335/append-data-to-a-json-file-with-php
 
         $json = file_get_contents('comments.json');
