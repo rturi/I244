@@ -10,27 +10,26 @@ if (!empty($_POST)) {
     echo $_POST['name'];
 
     $comment_data = array();
-
-
     $comment_data['name'] = $_POST['name'];
     $comment_data['title'] = $_POST['title'];
     $comment_data['comment'] = $_POST['comment'];
     $comment_data['created_at'] = date('m/d/Y', time()); // http://stackoverflow.com/questions/5213528/convert-timestamp-to-readable-date-time-php
 
-    //print_r($comment_data);
-
 
     $jsonComment = json_encode($comment_data);
-    //print_r($jsonComment);
 
     //http://www.w3schools.com/php/func_filesystem_fwrite.asp
-    $file = fopen("comments.json","w");
-
     //http://stackoverflow.com/questions/7895335/append-data-to-a-json-file-with-php
-    file_put_contents('comments.json', $jsonComment);
 
-    fclose($file);
+    $json = file_get_contents('comments.json');
 
+    $data = array();
+    $data = json_decode($json, true);
+    $data[] = $comment_data;
+    file_put_contents('comments.json', json_encode($data));
+
+
+    $output_comments = array();
 
 
 
@@ -46,7 +45,7 @@ if (!empty($_POST)) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Eksam - I244 - Roland Türi</title>
 </head>
 <body>
 
